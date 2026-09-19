@@ -1,0 +1,186 @@
+Court of Shadows — parking lot (future additions; do not implement until stable)
+
+Rule: finish crash bisect + interaction/GUI restore first. Items here are researched, not scheduled.
+
+================================================================================
+Lazy's Skimpy Accessories — Steam Workshop id=3008893158 (v0.2.5)
+================================================================================
+Mod path: D:/Games/steamapps/workshop/content/1158310/3008893158
+Descriptor: ugc_3008893158.mod
+Type: portrait / clothing accessories (genes + portrait_modifiers). No scripts/decisions.
+
+VERDICT: Compatible with PoD + CoS ONLY with a regenerated PoD merge patch and correct load order.
+Do NOT enable Workshop mod alone after PoD — breaks PoD custom clothes.
+
+--- What it does ---
+- Adds skimpy outfit templates (skimpy_plate, harness, etc.) via:
+  common/genes/05_genes_special_accessories_clothes.txt
+  common/genes/06_genes_special_accessories_headgear.txt
+  common/genes/07_genes_special_accessories_misc.txt
+  gfx/portraits/portrait_modifiers/00_custom_clothes.txt (and headgear, legwear)
+- Ships create_compatible_files.py to MERGE skimpy entries into another mod's copies of those files.
+
+--- Conflict with PoD (high if wrong) ---
+PoD has gfx/portraits/portrait_modifiers/00_custom_clothes.txt (~1463 lines, vampire outfits).
+Lazy's loaded file at mod ROOT is vanilla+skimpy only (~1131 lines) — replaces entire PoD file if loaded after PoD.
+Bundled 2216659254/ PoD compat folder is NOT auto-loaded; only a template. Pre-built clothes merge is
+STALE (1101 lines vs PoD 1463 on 1.19.0.6) — must regenerate.
+
+PoD does NOT override common/genes/05|06|07 — low script conflict there.
+
+--- Conflict with Court of Shadows (low) ---
+CoS has no active portrait_modifiers or gene overrides (bisect strips). No decision/script overlap.
+CoS POD portrait exists=this guards remain useful.
+Indirect: more portrait modifiers may increase character-UI crash risk (bisect history). Smoke-test after add.
+
+Umbral Orgy is_naked scenes vs skimpy accessories: separate systems; no hard block.
+
+--- Safe load order (when ready) ---
+1. Princes of Darkness
+2. MTS + MTS-PoD patch
+3. Court of Shadows
+4. Lazy's Skimpy Accessories (base)
+5. Lazy's Skimpy — PoD patch mod (generated) LAST
+
+--- Setup steps (when ready) ---
+1. Run create_compatible_files.py in skimpy mod folder.
+2. First merge: point at CK3 1.19 game folder (mod lists 1.18.* — regen for 1.19).
+3. Second merge: point at D:/Games/steamapps/workshop/content/1158310/2216659254 (PoD).
+4. Package output 2216659254/ tree as local mod e.g. mod_skimpy_pod_patch.mod — load last.
+5. Smoke test: 5+ min idle, right-click courtier, F4 council, optional orgy scene.
+
+--- Fix difficulty ---
+PoD patch (script + load order): easy–medium, ~30 min, no CoS code required.
+CoS changes for basic use: none.
+If portraits crash: disable skimpy or reorder; CoS guards stay.
+If CoS salon/orgy portrait_modifiers restored later: retest load order (medium).
+
+--- Optional future CoS work (only if we want deeper integration) ---
+- None required for “run alongside” use.
+- After restoring tools/disabled_gui portrait strips: verify skimpy + lasombra_court_salon_hair ordering.
+
+================================================================================
+Umbral Orgy nudity — vanilla reference bp1_yearly.2010 (Two Ships in the Night)
+================================================================================
+Researched: 2026-07-15. Do NOT re-enable until crash bisect + interaction/GUI restore stable.
+
+VERDICT: Reuse vanilla is_naked flag only; trait-gate + 2 portraits max; clear on every exit.
+CoS apply is currently NO-OP (v1.40.21+); clear/sanitize still runs.
+
+--- Vanilla reference (BP1) ---
+File: D:/Games/steamapps/common/Crusader Kings III/game/events/dlc/bp1/bp1_yearly.txt
+Event: bp1_yearly.2010 — Two spouses/consorts caught as lovers.
+
+Mechanism:
+- add_character_flag = is_naked on portrait characters only (not host).
+- Engine: should_be_naked_trigger (00_clothing_triggers.txt) + player Show Nudity setting.
+- No custom genes, no portrait_modifiers, no extra mod flags.
+
+Who gets naked:
+- Each left/right portrait partner ONLY if lustful OR rakish.
+- Host (root) never flagged.
+
+Lifecycle:
+- Apply in event immediate (before window opens).
+- Remove in event after (per-character has_character_flag = is_naked check).
+- Portrait count: 2 (left_portrait + right_portrait).
+
+Scene framing without nudity:
+- Text: desc.default (embrace) vs desc.lustful (explicit) based on host lustful/rakish.
+- Background: corridor_day default; bedchamber if bp1_yearly_2010_correct_circumstances.
+- Animations: love/ecstasy; lustful partners get ecstasy/happiness triggered_animation.
+
+--- CoS today (deferred) ---
+- lasombra_court_umbral_orgy_set_naked_portraits_effect = empty stub.
+- lasombra_court_safe_nude_portrait_apply_effect = empty stub (17_lasombra_court_portrait_effects.txt).
+- Clear still active: lasombra_court_umbral_orgy_clear_naked_portraits_effect + sanitize on abort/load.
+- Events still call set on 0207/0200 immediate; clear on 0201/chain end.
+- Old backup (tools/backup_umbral_orgy_pre_staged_v1_25): is_naked + lasombra_court_salon_nude_portrait
+  on root + orgy_attendee_1..5 — more aggressive than BP1; likely contributed to portrait/UI bisect.
+
+--- Recommended CoS pattern (when stable) ---
+1. Flag spotlight pair or orgy_attendee_1/2 only — NOT whole attendee list (max 2 nude portraits).
+2. Gate: lustful / rakish / deviant; skip chaste, celibate, minors.
+3. Apply in first revel beat immediate (0207 or 0208), not from 0198 summons.
+4. Clear: every event after, abandon_stalled_night, sanitize_court, existing scope clears.
+5. Wire apply to plain add_character_flag = is_naked first; add lasombra_court_salon_nude_portrait
+   only if PoD hair clips under no_clothes.
+6. Branch like BP1: sacrament tone = clothed + suggestive anim; appetite tone = bedchamber + is_naked.
+
+Minimal apply sketch (per character):
+  if = { limit = { OR = { has_trait = lustful has_trait = rakish has_trait = deviant }
+                  NOT = { has_trait = chaste }
+                  lasombra_court_safe_nude_portrait_character_allowed_trigger = yes }
+           add_character_flag = is_naked }
+
+Files to touch when implementing:
+- common/scripted_effects/02_lasombra_court_umbral_orgy_summary_effects.txt (set effect)
+- common/scripted_effects/17_lasombra_court_portrait_effects.txt (apply effect)
+- events/02_lasombra_court_umbral_orgy_events.txt (timing: 0207/0208 apply, 0201 after clear)
+- Optional: tone flags from 0205 (sacrament vs appetite) gate nudity like BP1 correct_circumstances
+
+Smoke test after enable:
+- Hold Umbral Orgy through 0207–0201; confirm flags cleared on ledger close.
+- Right-click reveler portraits mid-chain and after; no stuck nudity on map/court.
+- PoD vampire/mortal mix on portrait slots; 5+ min idle.
+
+Relation to Lazy's Skimpy (above): separate systems; is_naked uses no_clothes gene path, not skimpy templates.
+
+================================================================================
+Mass Demand Conversion — Steam Workshop id=2753176859 (v1.077)
+================================================================================
+Researched: 2026-07-15. PARKED — do not add to CoS until user requests.
+
+Workshop mod path: D:/Games/steamapps/workshop/content/1158310/2753176859
+Descriptor: ugc_2753176859.mod
+Type: one decision + script_values; bulk-fires vanilla conversion interactions via run_interaction.
+supported_version: 1.18.* (launcher warning on 1.19.*; code looks current as of Sept 2024 decision format).
+
+VERDICT: Safe to enable as standalone Workshop mod in playset (low PoD/CoS conflict).
+CoS port deferred — user chose to park native implementation for now.
+
+--- What it does ---
+Decision mod_mass_convert_subjects_decision with options:
+- Direct vassals → demand_conversion_vassal_ruler_interaction
+- Indirect vassals → same (skips religiously_protected contracts)
+- Tributaries → same
+- Courtiers → ask_for_conversion_courtier_interaction
+- House members → demand_conversion_interaction
+Uses send_threshold = decline (AI accepts/declines normally; not auto-convert).
+
+Does NOT convert counties — character faith only.
+
+--- Playset compatibility (standalone mod) ---
+PoD: Low conflict — uses interactions PoD already ships in 00_religious_interactions.txt.
+CoS: No file overlap. Complements Legate preach (county faith + Umbral culture), not a duplicate.
+Load order: PoD → MTS patch → CoS → Mass Demand Conversion (anywhere after PoD).
+
+PoD caveats:
+- Many vassals have religiously_protected / legacy_rights_protected — mod skips them (fewer targets).
+- PoD has commented-out POD_mass_demand_conversion_interaction in POD_qol_interactions.txt
+  (never enabled; likely popup-spam / maintenance). Workshop mod uses decision instead.
+
+--- Workshop mod limits ---
+- Event notification override is fully commented out (author avoided partial religious_interaction_events overwrite).
+- Expect normal conversion accept/decline popup volume when firing bulk requests.
+- No neteru / PoD-specific conversion paths (PoD commented version had worshipping_neteru option).
+
+--- If we port to CoS later (optional) ---
+Approach A: Copy decision + script_values; bump supported_version 1.19.*; Umbral-flavored loc.
+Approach B: Uncomment/adapt PoD POD_mass_demand_conversion_interaction pattern as self-target
+  interaction (matches POD_mass_demand_payment_interaction UX) — heavier, needs PoD parity testing.
+
+Do NOT merge with Legate county preach — keep character bulk vs county conversion separate.
+
+Files (minimal port):
+- common/decisions/zz_lasombra_court_mass_demand_conversion_decision.txt
+- common/script_values/zz_lasombra_court_mass_demand_conversion_values.txt
+- localization/english/lasombra_court_l_english.yml (decision + option strings)
+
+Smoke test after enable (workshop or port):
+- Decisions panel shows counts per category before confirm.
+- Protected vassals excluded; courtiers/vassals fire normal conversion events.
+- Via Tenebrarum ruler: eligible infidels convert; no error.log spam on load.
+
+================================================================================
+(end parking lot — append new items below with same section format)

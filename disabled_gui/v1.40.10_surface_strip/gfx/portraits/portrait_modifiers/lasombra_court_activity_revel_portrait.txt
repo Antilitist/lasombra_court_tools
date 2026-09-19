@@ -1,0 +1,110 @@
+# Court of Shadows activities — cloak-only revel attire (nude uses vanilla is_naked + salon_hair).
+
+lasombra_court_activity_revel_portrait = {
+	usage = game
+	selection_behavior = max
+	priority = 22
+
+	revel_cloak_western = {
+		outfit_tags = { no_clothes }
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = clothes
+				template = no_clothes
+				range = { 0 1 }
+			}
+			accessory = {
+				mode = add
+				gene = cloaks
+				template = ep2_cloak_western_era1_high_nobility
+				range = { 0 1 }
+			}
+			accessory = {
+				mode = add
+				gene = legwear
+				template = no_legwear
+				value = 1.0
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 10000
+				has_character_flag = lasombra_court_activity_cloak_only
+				portrait_western_clothing_trigger = yes
+			}
+		}
+	}
+
+	revel_cloak_mena = {
+		outfit_tags = { no_clothes }
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = clothes
+				template = no_clothes
+				range = { 0 1 }
+			}
+			accessory = {
+				mode = add
+				gene = cloaks
+				template = ep2_cloak_mena_travel
+				range = { 0 1 }
+			}
+			accessory = {
+				mode = add
+				gene = legwear
+				template = no_legwear
+				value = 1.0
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 10000
+				has_character_flag = lasombra_court_activity_cloak_only
+				OR = {
+					portrait_mena_clothing_trigger = yes
+					portrait_indian_clothing_trigger = yes
+					portrait_african_clothing_trigger = yes
+				}
+			}
+		}
+	}
+
+	revel_cloak_northern = {
+		outfit_tags = { no_clothes }
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = clothes
+				template = no_clothes
+				range = { 0 1 }
+			}
+			accessory = {
+				mode = add
+				gene = cloaks
+				template = ep2_cloak_western_era1_high_nobility
+				range = { 0 1 }
+			}
+			accessory = {
+				mode = add
+				gene = legwear
+				template = no_legwear
+				value = 1.0
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 10000
+				has_character_flag = lasombra_court_activity_cloak_only
+				OR = {
+					portrait_northern_clothing_trigger = yes
+					portrait_steppe_clothing_trigger = yes
+				}
+			}
+		}
+	}
+}

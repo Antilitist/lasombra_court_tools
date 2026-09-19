@@ -1,0 +1,97 @@
+# Self-targeted herd feast — appears under Vampire after Manipulate Herd.
+
+lasombra_court_drink_all_herd_interaction = {
+	category = interaction_category_vampire
+	common_interaction = yes
+	interface_priority = 87
+	desc = lasombra_court_drink_all_herd_interaction_desc
+	icon = POD_drink_herd
+	ai_frequency = 0
+	send_options_exclusive = yes
+
+	is_shown = {
+		scope:actor = {
+			POD_is_vampire_trigger = yes
+		}
+		scope:actor = scope:recipient
+		scope:recipient = { is_adult = yes }
+		scope:actor = {
+			num_of_relation_herd_member > 0
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		POD_self_targeted_interaction_is_valid_showing_failures_only = yes
+	}
+
+	send_option = {
+		flag = sip
+		starts_enabled = { always = yes }
+		localization = POD_drink_herd_sip_option
+		is_valid = {
+			scope:actor = {
+				any_relation = {
+					type = herd_member
+					lasombra_court_herd_feed_candidate_trigger = { AMOUNT = 1 }
+				}
+			}
+		}
+	}
+
+	send_option = {
+		flag = drink
+		localization = POD_drink_herd_drink_option
+		is_valid = {
+			scope:actor = {
+				any_relation = {
+					type = herd_member
+					lasombra_court_herd_feed_candidate_trigger = { AMOUNT = 2 }
+				}
+			}
+		}
+	}
+
+	on_accept = {
+		custom_tooltip = POD_drink_herd_pause_warning
+
+		if = {
+			limit = { scope:sip = yes }
+			lasombra_court_drink_all_herd_effect = { AMOUNT = 1 }
+		}
+		else = {
+			lasombra_court_drink_all_herd_effect = { AMOUNT = 2 }
+		}
+
+		if = {
+			limit = {
+				scope:actor = {
+					var:lasombra_court_herd_feed_count > 0
+				}
+			}
+			scope:actor = {
+				send_interface_toast = {
+					type = event_toast_effect_good
+					title = lasombra_court_drink_all_herd_toast_title
+					left_icon = scope:actor
+					custom_description = {
+						text = lasombra_court_drink_all_herd_toast_vessels_desc
+						value = var:lasombra_court_herd_feed_count
+					}
+					custom_description = {
+						text = lasombra_court_drink_all_herd_toast_blood_desc
+						value = var:lasombra_court_herd_blood_total
+					}
+					custom_description = {
+						text = lasombra_court_drink_all_herd_toast_resonance_desc
+						value = var:lasombra_court_herd_resonance_total
+					}
+				}
+				remove_variable = lasombra_court_herd_feed_count
+				remove_variable = lasombra_court_herd_blood_total
+				remove_variable = lasombra_court_herd_resonance_total
+			}
+		}
+	}
+
+	auto_accept = yes
+}

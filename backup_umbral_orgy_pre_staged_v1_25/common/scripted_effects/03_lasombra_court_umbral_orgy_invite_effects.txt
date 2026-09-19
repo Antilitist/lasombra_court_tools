@@ -1,0 +1,466 @@
+# Umbral Orgy — auto-summon subjects below the host (cap 7), invite pool guests, build mixed attendee pool.
+
+lasombra_court_umbral_orgy_clear_invite_state_effect = {
+	clear_variable_list = orgy_attendees
+	clear_variable_list = orgy_invited_subjects
+	clear_variable_list = orgy_invite_declined
+	clear_variable_list = orgy_invited_guests
+	clear_variable_list = orgy_guest_invite_declined
+	set_variable = { name = orgy_invites_sent value = 0 }
+	set_variable = { name = orgy_invite_accept_count value = 0 }
+	set_variable = { name = orgy_invite_decline_count value = 0 }
+	set_variable = { name = orgy_guest_invite_accept_count value = 0 }
+	set_variable = { name = orgy_guest_invite_decline_count value = 0 }
+	set_variable = { name = orgy_guest_recruited_count value = 0 }
+	set_variable = { name = orgy_lover_summon_accept_count value = 0 }
+	set_variable = { name = orgy_lover_summon_decline_count value = 0 }
+	clear_variable_list = orgy_summoned_lovers
+	clear_variable_list = orgy_lover_summon_declined
+}
+
+# prev = courtier being added; root = { } switches this to the host.
+lasombra_court_umbral_orgy_add_to_attendee_pool_effect = {
+	root = {
+		if = {
+			limit = {
+				NOT = {
+					is_target_in_variable_list = {
+						name = orgy_attendees
+						target = prev
+					}
+				}
+			}
+			add_to_variable_list = {
+				name = orgy_attendees
+				target = prev
+			}
+		}
+	}
+}
+
+lasombra_court_umbral_orgy_add_host_courtiers_to_pool_effect = {
+	every_courtier = {
+		limit = {
+			is_adult = yes
+			is_imprisoned = no
+			NOT = { this = root }
+		}
+		lasombra_court_umbral_orgy_add_to_attendee_pool_effect = yes
+	}
+}
+
+# Spouses and concubines are not courtiers — add them explicitly.
+lasombra_court_umbral_orgy_add_host_consorts_to_pool_effect = {
+	every_consort = {
+		limit = {
+			lasombra_court_orgy_consort_candidate_trigger = yes
+		}
+		lasombra_court_umbral_orgy_add_to_attendee_pool_effect = yes
+	}
+}
+
+# Bring a summoned lover to the host's court for the night.
+lasombra_court_umbral_orgy_lover_arrive_effect = {
+	if = {
+		limit = {
+			can_recruit_character_to_court_trigger = {
+				RECRUITER = root
+				RECRUITEE = scope:orgy_invited_lover
+			}
+		}
+		root = {
+			add_courtier ?= scope:orgy_invited_lover
+		}
+		scope:orgy_invited_lover = {
+			remove_variable = last_visited_ruler
+		}
+	}
+	else_if = {
+		limit = {
+			scope:orgy_invited_lover = { is_ruler = no }
+		}
+		scope:orgy_invited_lover = {
+			visit_court_of = root
+		}
+	}
+	else = {
+		scope:orgy_invited_lover = {
+			hidden_effect = {
+				set_location = root.location
+			}
+		}
+	}
+}
+
+lasombra_court_umbral_orgy_lover_summon_accept_effect = {
+	root = {
+		add_to_variable_list = {
+			name = orgy_summoned_lovers
+			target = scope:orgy_invited_lover
+		}
+		change_variable = {
+			name = orgy_lover_summon_accept_count
+			add = 1
+		}
+	}
+	scope:orgy_invited_lover = {
+		add_opinion = {
+			target = root
+			modifier = lasombra_court_orgy_lover_summon_accepted_opinion
+		}
+		lasombra_court_umbral_orgy_lover_arrive_effect = yes
+		lasombra_court_umbral_orgy_add_to_attendee_pool_effect = yes
+	}
+}
+
+lasombra_court_umbral_orgy_lover_summon_decline_effect = {
+	root = {
+		add_to_variable_list = {
+			name = orgy_lover_summon_declined
+			target = scope:orgy_invited_lover
+		}
+		change_variable = {
+			name = orgy_lover_summon_decline_count
+			add = 1
+		}
+	}
+	scope:orgy_invited_lover = {
+		add_opinion = {
+			target = root
+			modifier = lasombra_court_orgy_lover_summon_declined_opinion
+		}
+	}
+}
+
+# Local lovers join immediately; distant lovers are auto-summoned.
+lasombra_court_umbral_orgy_process_lover_invites_effect = {
+	every_relation = {
+		type = lover
+		limit = {
+			lasombra_court_orgy_lover_local_trigger = yes
+		}
+		lasombra_court_umbral_orgy_add_to_attendee_pool_effect = yes
+	}
+	every_relation = {
+		type = lover
+		limit = {
+			lasombra_court_orgy_lover_distant_summon_trigger = yes
+		}
+		save_scope_as = orgy_invited_lover
+
+		random_list = {
+			75 = {
+				modifier = {
+					add = 25
+					opinion = {
+						target = root
+						value >= 25
+					}
+				}
+				modifier = {
+					add = 20
+					has_trait = lustful
+				}
+				modifier = {
+					add = 15
+					has_trait = rakish
+				}
+				modifier = {
+					add = 10
+					has_trait = gregarious
+				}
+				modifier = {
+					add = 10
+					has_trait = lifestyle_reveler
+				}
+				modifier = {
+					add = 10
+					has_relation_soulmate = root
+				}
+				modifier = {
+					add = -30
+					has_trait = chaste
+				}
+				modifier = {
+					add = -40
+					has_trait = celibate
+				}
+				modifier = {
+					add = -15
+					has_trait = shy
+				}
+				lasombra_court_umbral_orgy_lover_summon_accept_effect = yes
+			}
+			25 = {
+				modifier = {
+					add = -15
+					has_trait = lustful
+				}
+				lasombra_court_umbral_orgy_lover_summon_decline_effect = yes
+			}
+		}
+	}
+}
+
+lasombra_court_umbral_orgy_add_subject_courtiers_to_pool_effect = {
+	scope:orgy_invited_subject = {
+		every_courtier = {
+			limit = {
+				is_adult = yes
+				is_imprisoned = no
+			}
+			lasombra_court_umbral_orgy_add_to_attendee_pool_effect = yes
+		}
+	}
+}
+
+lasombra_court_umbral_orgy_subject_accept_invite_effect = {
+	root = {
+		add_piety = lasombra_court_orgy_invite_accept_piety_cost_value_negative
+		add_prestige = lasombra_court_orgy_invite_accept_prestige_cost_value_negative
+		add_to_variable_list = {
+			name = orgy_invited_subjects
+			target = scope:orgy_invited_subject
+		}
+		change_variable = {
+			name = orgy_invite_accept_count
+			add = 1
+		}
+	}
+	scope:orgy_invited_subject = {
+		add_opinion = {
+			target = root
+			modifier = lasombra_court_orgy_subject_accepted_opinion
+		}
+	}
+	lasombra_court_umbral_orgy_add_subject_courtiers_to_pool_effect = yes
+}
+
+lasombra_court_umbral_orgy_subject_decline_invite_effect = {
+	root = {
+		add_to_variable_list = {
+			name = orgy_invite_declined
+			target = scope:orgy_invited_subject
+		}
+		change_variable = {
+			name = orgy_invite_decline_count
+			add = 1
+		}
+	}
+	scope:orgy_invited_subject = {
+		add_prestige = lasombra_court_orgy_invite_decline_prestige_loss_value_negative
+		pay_short_term_gold = {
+			target = root
+			gold = lasombra_court_orgy_invite_decline_gold_fine_value
+		}
+		add_opinion = {
+			target = root
+			modifier = lasombra_court_orgy_subject_declined_opinion
+		}
+	}
+}
+
+lasombra_court_umbral_orgy_guest_accept_invite_effect = {
+	root = {
+		add_to_variable_list = {
+			name = orgy_invited_guests
+			target = scope:orgy_invited_guest
+		}
+		change_variable = {
+			name = orgy_guest_invite_accept_count
+			add = 1
+		}
+	}
+	scope:orgy_invited_guest = {
+		add_opinion = {
+			target = root
+			modifier = lasombra_court_orgy_guest_accepted_opinion
+		}
+		if = {
+			limit = {
+				can_recruit_character_to_court_trigger = {
+					RECRUITER = root
+					RECRUITEE = scope:orgy_invited_guest
+				}
+			}
+			root = {
+				add_courtier ?= scope:orgy_invited_guest
+				change_variable = {
+					name = orgy_guest_recruited_count
+					add = 1
+				}
+			}
+			remove_variable = last_visited_ruler
+		}
+		every_traveling_family_member = {
+			limit = {
+				can_recruit_character_to_court_trigger = {
+					RECRUITER = root
+					RECRUITEE = prev
+				}
+			}
+			root = {
+				add_courtier ?= prev
+			}
+			remove_variable = last_visited_ruler
+		}
+		lasombra_court_umbral_orgy_add_to_attendee_pool_effect = yes
+	}
+}
+
+lasombra_court_umbral_orgy_guest_decline_invite_effect = {
+	root = {
+		add_to_variable_list = {
+			name = orgy_guest_invite_declined
+			target = scope:orgy_invited_guest
+		}
+		change_variable = {
+			name = orgy_guest_invite_decline_count
+			add = 1
+		}
+	}
+	scope:orgy_invited_guest = {
+		add_opinion = {
+			target = root
+			modifier = lasombra_court_orgy_guest_declined_opinion
+		}
+	}
+}
+
+lasombra_court_umbral_orgy_process_pool_guest_invites_effect = {
+	every_pool_guest = {
+		limit = {
+			lasombra_court_orgy_pool_guest_invite_candidate_trigger = yes
+		}
+		save_scope_as = orgy_invited_guest
+
+		random_list = {
+			50 = {
+				modifier = {
+					add = 20
+					opinion = {
+						target = root
+						value >= 25
+					}
+				}
+				modifier = {
+					add = 15
+					faith = faith:via_tenebrarum
+				}
+				modifier = {
+					add = 15
+					has_trait = lustful
+				}
+				modifier = {
+					add = 10
+					has_trait = rakish
+				}
+				modifier = {
+					add = 10
+					has_trait = gregarious
+				}
+				modifier = {
+					add = 10
+					has_trait = lifestyle_reveler
+				}
+				modifier = {
+					add = 10
+					has_trait = ambitious
+				}
+				modifier = {
+					add = -20
+					has_trait = shy
+				}
+				modifier = {
+					add = -25
+					has_trait = chaste
+				}
+				modifier = {
+					add = -15
+					has_trait = celibate
+				}
+				lasombra_court_umbral_orgy_guest_accept_invite_effect = yes
+			}
+			50 = {
+				lasombra_court_umbral_orgy_guest_decline_invite_effect = yes
+			}
+		}
+	}
+}
+
+lasombra_court_umbral_orgy_process_subject_invites_effect = {
+	lasombra_court_umbral_orgy_clear_invite_state_effect = yes
+	lasombra_court_umbral_orgy_add_host_courtiers_to_pool_effect = yes
+	lasombra_court_umbral_orgy_add_host_consorts_to_pool_effect = yes
+	lasombra_court_umbral_orgy_process_lover_invites_effect = yes
+
+	every_vassal_or_below = {
+		limit = {
+			root = {
+				var:orgy_invites_sent < 7
+			}
+			lasombra_court_orgy_subject_invite_candidate_trigger = yes
+		}
+		save_scope_as = orgy_invited_subject
+		root = {
+			change_variable = {
+				name = orgy_invites_sent
+				add = 1
+			}
+		}
+
+		random_list = {
+			50 = {
+				modifier = {
+					add = 20
+					opinion = {
+						target = root
+						value >= 25
+					}
+				}
+				modifier = {
+					add = 15
+					faith = faith:via_tenebrarum
+				}
+				modifier = {
+					add = 10
+					has_trait = lustful
+				}
+				modifier = {
+					add = 10
+					has_trait = rakish
+				}
+				modifier = {
+					add = 10
+					has_trait = gregarious
+				}
+				modifier = {
+					add = 10
+					has_trait = lifestyle_reveler
+				}
+				modifier = {
+					add = 15
+					root = { dread >= 50 }
+				}
+				modifier = {
+					add = -20
+					has_trait = shy
+				}
+				modifier = {
+					add = -25
+					has_trait = chaste
+				}
+				modifier = {
+					add = -15
+					has_trait = celibate
+				}
+				lasombra_court_umbral_orgy_subject_accept_invite_effect = yes
+			}
+			50 = {
+				lasombra_court_umbral_orgy_subject_decline_invite_effect = yes
+			}
+		}
+	}
+
+	lasombra_court_umbral_orgy_process_pool_guest_invites_effect = yes
+}

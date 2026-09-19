@@ -1,0 +1,21 @@
+# Court of Shadows — embrace petition departure cleanup (v1.36.0).
+
+on_leave_court = {
+	on_actions = { lasombra_court_embrace_petition_on_leave_court }
+}
+
+lasombra_court_embrace_petition_on_leave_court = {
+	effect = {
+		scope:old_employer = {
+			if = {
+				limit = {
+					var:lasombra_court_embrace_petitioner ?= {
+						is_alive = yes
+						this = root
+					}
+				}
+				lasombra_court_embrace_petition_departure_cleanup_effect = yes
+			}
+		}
+	}
+}

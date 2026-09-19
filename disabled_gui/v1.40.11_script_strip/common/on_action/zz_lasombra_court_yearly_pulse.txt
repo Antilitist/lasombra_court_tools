@@ -1,0 +1,27 @@
+# Court of Shadows — yearly narrative pulse (v1.17.0).
+
+yearly_playable_pulse = {
+	on_actions = { lasombra_court_yearly_playable_pulse }
+}
+
+lasombra_court_yearly_playable_pulse = {
+	effect = {
+		if = {
+			limit = {
+				is_ai = yes
+				lasombra_court_umbral_crossing_can_start_trigger = yes
+			}
+			random = {
+				chance = 4
+				trigger_event = lasombra_court.1570
+			}
+		}
+		if = {
+			limit = { lasombra_court_playable_pulse_eligible_trigger = yes }
+			random = {
+				chance = 18
+				lasombra_court_yearly_pulse_dispatch_effect = yes
+			}
+		}
+	}
+}

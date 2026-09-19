@@ -1,0 +1,65 @@
+# Keep Umbral council tasks bound on existing saves (monthly safety net for the player).
+
+on_weekly_playable_pulse = {
+	on_actions = { lasombra_court_weekly_sanitize_pulse }
+}
+
+on_monthly_playable_pulse = {
+	on_actions = {
+		lasombra_court_monthly_sanitize_pulse
+		lasombra_court_monthly_umbral_council_pulse
+	}
+}
+
+quarterly_playable_pulse = {
+	on_actions = { lasombra_court_quarterly_sanitize_pulse }
+}
+
+lasombra_court_weekly_sanitize_pulse = {
+	effect = {
+		if = {
+			limit = {
+				is_ai = no
+				lasombra_court_player_past_pod_chargen_trigger = yes
+			}
+			lasombra_court_sanitize_stale_character_vars_effect = yes
+		}
+	}
+}
+
+lasombra_court_monthly_sanitize_pulse = {
+	effect = {
+		if = {
+			limit = {
+				is_ai = no
+				lasombra_court_player_past_pod_chargen_trigger = yes
+			}
+			lasombra_court_sanitize_stale_character_vars_effect = yes
+			lasombra_court_repair_embraced_child_courtiers_effect = yes
+		}
+	}
+}
+
+lasombra_court_quarterly_sanitize_pulse = {
+	effect = {
+		if = {
+			limit = {
+				is_ai = no
+				lasombra_court_player_past_pod_chargen_trigger = yes
+			}
+			lasombra_court_sanitize_stale_character_vars_effect = yes
+		}
+	}
+}
+
+lasombra_court_monthly_umbral_council_pulse = {
+	effect = {
+		if = {
+			limit = {
+				lasombra_court_player_past_pod_chargen_trigger = yes
+				lasombra_court_can_employ_umbral_council_trigger = yes
+			}
+			lasombra_court_init_umbral_council_positions_effect = yes
+		}
+	}
+}

@@ -1,0 +1,11 @@
+# Court of Shadows — embrace petition pulse every 4 years (v1.35.0).
+
+yearly_playable_pulse = {
+	on_actions = { lasombra_court_embrace_petition_yearly_pulse }
+}
+
+lasombra_court_embrace_petition_yearly_pulse = {
+	effect = {
+		lasombra_court_embrace_petition_yearly_tick_effect = yes
+	}
+}

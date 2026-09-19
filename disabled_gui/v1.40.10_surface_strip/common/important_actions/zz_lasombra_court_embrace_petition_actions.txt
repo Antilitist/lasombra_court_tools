@@ -1,0 +1,36 @@
+# Court of Shadows — embrace petition alert (v1.36.0).
+
+action_lasombra_court_embrace_petition = {
+	type = alert
+	icon = action_lasombra_court_embrace_decision
+
+	check_create_action = {
+		if = {
+			limit = { lasombra_court_embrace_petitioner_var_unresolvable_trigger = yes }
+			lasombra_court_embrace_petition_cleanup_effect = yes
+		}
+		if = {
+			limit = { lasombra_court_embrace_petition_alert_valid_trigger = yes }
+			try_create_important_action = {
+				important_action_type = action_lasombra_court_embrace_petition
+				actor = root
+			}
+		}
+	}
+
+	unimportant = {
+		NOR = {
+			has_character_flag = lasombra_court_embrace_petition_pending_event
+			AND = {
+				lasombra_court_embrace_petitioner_var_valid_trigger = yes
+				var:lasombra_court_embrace_petitioner ?= {
+					lasombra_court_embrace_petitioner_at_court_trigger = { SIRE = root }
+				}
+			}
+		}
+	}
+
+	effect = {
+		lasombra_court_embrace_petition_alert_click_effect = yes
+	}
+}

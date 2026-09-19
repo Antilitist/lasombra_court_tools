@@ -1,0 +1,156 @@
+﻿# Court tutor / guru rank bonus on a learn_language scheme just started (child scope).
+# Mirrors vanilla make_child_learn_language ranks (aptitude 0–4 → rank 1–5 modifiers).
+
+lasombra_court_apply_court_tutor_language_rank_modifier_effect = {
+	if = {
+		limit = {
+			scope:actor = {
+				OR = {
+					AND = {
+						exists = court_position:court_tutor_court_position
+						court_position:court_tutor_court_position = {
+							aptitude:court_tutor_court_position = 0
+						}
+					}
+					AND = {
+						exists = court_position:court_guru_court_position
+						court_position:court_guru_court_position = {
+							aptitude:court_guru_court_position = 0
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = court_tutor_child_language_rank_1
+		hidden_effect = {
+			random_scheme = {
+				type = learn_language
+				add_scheme_modifier = {
+					type = court_tutor_child_language_rank_1_modifier
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			scope:actor = {
+				OR = {
+					AND = {
+						exists = court_position:court_tutor_court_position
+						court_position:court_tutor_court_position = {
+							aptitude:court_tutor_court_position = 1
+						}
+					}
+					AND = {
+						exists = court_position:court_guru_court_position
+						court_position:court_guru_court_position = {
+							aptitude:court_guru_court_position = 1
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = court_tutor_child_language_rank_2
+		hidden_effect = {
+			random_scheme = {
+				type = learn_language
+				add_scheme_modifier = {
+					type = court_tutor_child_language_rank_2_modifier
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			scope:actor = {
+				OR = {
+					AND = {
+						exists = court_position:court_tutor_court_position
+						court_position:court_tutor_court_position = {
+							aptitude:court_tutor_court_position = 2
+						}
+					}
+					AND = {
+						exists = court_position:court_guru_court_position
+						court_position:court_guru_court_position = {
+							aptitude:court_guru_court_position = 2
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = court_tutor_child_language_rank_3
+		hidden_effect = {
+			random_scheme = {
+				type = learn_language
+				add_scheme_modifier = {
+					type = court_tutor_child_language_rank_3_modifier
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			scope:actor = {
+				OR = {
+					AND = {
+						exists = court_position:court_tutor_court_position
+						court_position:court_tutor_court_position = {
+							aptitude:court_tutor_court_position = 3
+						}
+					}
+					AND = {
+						exists = court_position:court_guru_court_position
+						court_position:court_guru_court_position = {
+							aptitude:court_guru_court_position = 3
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = court_tutor_child_language_rank_4
+		hidden_effect = {
+			random_scheme = {
+				type = learn_language
+				add_scheme_modifier = {
+					type = court_tutor_child_language_rank_4_modifier
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			scope:actor = {
+				OR = {
+					AND = {
+						exists = court_position:court_tutor_court_position
+						court_position:court_tutor_court_position = {
+							OR = {
+								aptitude:court_tutor_court_position = 4
+								aptitude:court_tutor_court_position >= 5
+							}
+						}
+					}
+					AND = {
+						exists = court_position:court_guru_court_position
+						court_position:court_guru_court_position = {
+							OR = {
+								aptitude:court_guru_court_position = 4
+								aptitude:court_guru_court_position >= 5
+							}
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = court_tutor_child_language_rank_5
+		hidden_effect = {
+			random_scheme = {
+				type = learn_language
+				add_scheme_modifier = {
+					type = court_tutor_child_language_rank_5_modifier
+				}
+			}
+		}
+	}
+}

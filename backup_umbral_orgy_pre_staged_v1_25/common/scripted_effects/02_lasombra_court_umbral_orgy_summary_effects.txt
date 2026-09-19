@@ -1,0 +1,163 @@
+lasombra_court_umbral_orgy_clear_summary_lists_effect = {
+	every_in_list = {
+		variable = orgy_summary_present
+		remove_character_flag = orgy_ledger_laid
+		remove_character_flag = orgy_ledger_revelry
+		remove_character_flag = orgy_ledger_converted
+		remove_character_flag = orgy_ledger_herd
+		remove_character_flag = orgy_ledger_ghoul
+
+		remove_character_flag = orgy_paired
+		remove_character_flag = orgy_was_not_pregnant
+	}
+	clear_variable_list = orgy_summary_present
+	clear_variable_list = orgy_summary_portraits
+	clear_variable_list = orgy_summary_laid
+	clear_variable_list = orgy_summary_revelry
+	clear_variable_list = orgy_summary_converted
+	clear_variable_list = orgy_summary_herd
+	clear_variable_list = orgy_summary_ghoul
+
+}
+
+lasombra_court_umbral_orgy_clear_invite_lists_effect = {
+	clear_variable_list = orgy_attendees
+	clear_variable_list = orgy_invited_subjects
+	clear_variable_list = orgy_invite_declined
+	clear_variable_list = orgy_invited_guests
+	clear_variable_list = orgy_guest_invite_declined
+	remove_variable = orgy_invites_sent
+	remove_variable = orgy_invite_accept_count
+	remove_variable = orgy_invite_decline_count
+	remove_variable = orgy_guest_invite_accept_count
+	remove_variable = orgy_guest_invite_decline_count
+	remove_variable = orgy_guest_recruited_count
+}
+
+lasombra_court_umbral_orgy_log_summary_effect = {
+	root = {
+		add_to_variable_list = {
+			name = $LIST$
+			target = $TARGET$
+		}
+	}
+}
+
+lasombra_court_umbral_orgy_record_portraits_effect = {
+	if = {
+		limit = { exists = scope:orgy_attendee_1 }
+		lasombra_court_umbral_orgy_log_summary_effect = {
+			LIST = orgy_summary_portraits
+			TARGET = scope:orgy_attendee_1
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_2 }
+		lasombra_court_umbral_orgy_log_summary_effect = {
+			LIST = orgy_summary_portraits
+			TARGET = scope:orgy_attendee_2
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_3 }
+		lasombra_court_umbral_orgy_log_summary_effect = {
+			LIST = orgy_summary_portraits
+			TARGET = scope:orgy_attendee_3
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_4 }
+		lasombra_court_umbral_orgy_log_summary_effect = {
+			LIST = orgy_summary_portraits
+			TARGET = scope:orgy_attendee_4
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_5 }
+		lasombra_court_umbral_orgy_log_summary_effect = {
+			LIST = orgy_summary_portraits
+			TARGET = scope:orgy_attendee_5
+		}
+	}
+}
+
+# Nude scene: is_naked + lasombra_court_salon_nude_portrait keeps hair under no_clothes.
+lasombra_court_umbral_orgy_set_naked_portraits_effect = {
+	add_character_flag = is_naked
+	add_character_flag = lasombra_court_salon_nude_portrait
+	if = {
+		limit = { exists = scope:orgy_attendee_1 }
+		scope:orgy_attendee_1 = {
+			add_character_flag = is_naked
+			add_character_flag = lasombra_court_salon_nude_portrait
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_2 }
+		scope:orgy_attendee_2 = {
+			add_character_flag = is_naked
+			add_character_flag = lasombra_court_salon_nude_portrait
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_3 }
+		scope:orgy_attendee_3 = {
+			add_character_flag = is_naked
+			add_character_flag = lasombra_court_salon_nude_portrait
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_4 }
+		scope:orgy_attendee_4 = {
+			add_character_flag = is_naked
+			add_character_flag = lasombra_court_salon_nude_portrait
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_5 }
+		scope:orgy_attendee_5 = {
+			add_character_flag = is_naked
+			add_character_flag = lasombra_court_salon_nude_portrait
+		}
+	}
+}
+
+lasombra_court_umbral_orgy_clear_naked_portraits_effect = {
+	remove_character_flag = is_naked
+	remove_character_flag = lasombra_court_salon_nude_portrait
+	if = {
+		limit = { exists = scope:orgy_attendee_1 }
+		scope:orgy_attendee_1 = {
+			remove_character_flag = is_naked
+			remove_character_flag = lasombra_court_salon_nude_portrait
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_2 }
+		scope:orgy_attendee_2 = {
+			remove_character_flag = is_naked
+			remove_character_flag = lasombra_court_salon_nude_portrait
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_3 }
+		scope:orgy_attendee_3 = {
+			remove_character_flag = is_naked
+			remove_character_flag = lasombra_court_salon_nude_portrait
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_4 }
+		scope:orgy_attendee_4 = {
+			remove_character_flag = is_naked
+			remove_character_flag = lasombra_court_salon_nude_portrait
+		}
+	}
+	if = {
+		limit = { exists = scope:orgy_attendee_5 }
+		scope:orgy_attendee_5 = {
+			remove_character_flag = is_naked
+			remove_character_flag = lasombra_court_salon_nude_portrait
+		}
+	}
+}

@@ -1,0 +1,507 @@
+﻿# Draw promising children of the realm into the Shadow Household.
+
+lasombra_court_shadow_adoption_interaction = {
+	icon = icon_dynasty
+	category = interaction_category_diplomacy
+	interface_priority = 58
+	common_interaction = yes
+
+	desc = lasombra_court_shadow_adoption_interaction_desc
+	send_name = lasombra_court_shadow_adoption_interaction_send
+	greeting = positive
+	notification_text = lasombra_court_shadow_adoption_notification
+
+	ai_min_reply_days = 4
+	ai_max_reply_days = 12
+	ai_maybe = yes
+	ai_frequency = 0
+
+	cooldown = { years = 1 }
+
+	redirect = {
+		scope:recipient = {
+			save_scope_as = secondary_recipient
+			# Only retarget to custodian for valid adoption children — never on every right-click.
+			if = {
+				limit = {
+					lasombra_court_shadow_adoption_child_shown_trigger = yes
+					lasombra_court_shadow_adoption_needs_custodian_consent_trigger = yes
+				}
+				lasombra_court_shadow_adoption_pick_custodian_effect = yes
+			}
+		}
+	}
+
+	is_shown = {
+		scope:actor = {
+			lasombra_court_can_employ_umbral_council_trigger = yes
+			is_adult = yes
+		}
+		trigger_if = {
+			limit = { exists = scope:secondary_recipient }
+			scope:secondary_recipient = {
+				lasombra_court_shadow_adoption_child_shown_trigger = yes
+			}
+		}
+		trigger_else = {
+			scope:recipient = {
+				lasombra_court_shadow_adoption_child_shown_trigger = yes
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			is_imprisoned = no
+			is_at_war = no
+		}
+		trigger_if = {
+			limit = { exists = scope:secondary_recipient }
+			scope:secondary_recipient = {
+				lasombra_court_shadow_adoption_child_valid_trigger = yes
+			}
+		}
+		trigger_else = {
+			scope:recipient = {
+				lasombra_court_shadow_adoption_child_valid_trigger = yes
+			}
+		}
+		trigger_if = {
+			limit = {
+				exists = scope:secondary_recipient
+				scope:secondary_recipient = { lasombra_court_shadow_adoption_heir_sensitive_trigger = yes }
+			}
+			custom_description = {
+				text = lasombra_court_shadow_adoption_heir_requires_coercion
+				lasombra_court_shadow_adoption_heir_allowed_trigger = yes
+			}
+		}
+		trigger_if = {
+			limit = { scope:compensation_gold = yes }
+			scope:actor = { gold >= lasombra_court_shadow_adoption_gold_cost }
+		}
+		trigger_if = {
+			limit = { scope:compensation_prestige = yes }
+			scope:actor = { prestige >= lasombra_court_shadow_adoption_prestige_cost }
+		}
+		trigger_if = {
+			limit = { scope:compensation_piety = yes }
+			scope:actor = { piety >= lasombra_court_shadow_adoption_piety_cost }
+		}
+		trigger_if = {
+			limit = { scope:compensation_dread = yes }
+			scope:actor = { dread >= 25 }
+		}
+		trigger_if = {
+			limit = { scope:compensation_hook = yes }
+			scope:actor = { has_usable_hook = scope:recipient }
+		}
+		trigger_if = {
+			limit = { exists = scope:secondary_recipient }
+			scope:secondary_recipient = {
+				custom_tooltip = {
+					text = ward_travelling_tt
+					NOT = { exists = var:ward_travelling_to_guardian }
+				}
+				custom_tooltip = {
+					text = hostage_travelling_tt
+					NOT = { exists = var:hostage_travelling_to_warden }
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = { NOT = { exists = scope:secondary_recipient } }
+			scope:recipient = {
+				custom_tooltip = {
+					text = ward_travelling_tt
+					NOT = { exists = var:ward_travelling_to_guardian }
+				}
+				custom_tooltip = {
+					text = hostage_travelling_tt
+					NOT = { exists = var:hostage_travelling_to_warden }
+				}
+			}
+		}
+	}
+
+	send_option = {
+		flag = compensation_gold
+		starts_enabled = { always = yes }
+		localization = lasombra_court_shadow_adoption_compensation_gold_option
+	}
+
+	send_option = {
+		flag = compensation_prestige
+		localization = lasombra_court_shadow_adoption_compensation_prestige_option
+		is_valid = {
+			scope:actor = { prestige >= lasombra_court_shadow_adoption_prestige_cost }
+		}
+	}
+
+	send_option = {
+		flag = compensation_piety
+		localization = lasombra_court_shadow_adoption_compensation_piety_option
+		is_valid = {
+			scope:actor = { piety >= lasombra_court_shadow_adoption_piety_cost }
+		}
+	}
+
+	send_option = {
+		flag = compensation_dread
+		localization = lasombra_court_shadow_adoption_compensation_dread_option
+		is_valid = {
+			scope:secondary_recipient ?= {
+				lasombra_court_shadow_adoption_needs_custodian_consent_trigger = yes
+			}
+			scope:actor = { dread >= 25 }
+		}
+	}
+
+	send_option = {
+		flag = compensation_hook
+		localization = lasombra_court_shadow_adoption_compensation_hook_option
+		is_valid = {
+			scope:secondary_recipient ?= {
+				lasombra_court_shadow_adoption_needs_custodian_consent_trigger = yes
+			}
+			scope:actor = { has_usable_hook = scope:recipient }
+		}
+	}
+	should_use_extra_icon = {
+		scope:compensation_hook = yes
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = yes
+
+	auto_accept = {
+		OR = {
+			AND = {
+				custom_description = {
+					text = LASOMBRA_COURT_SHADOW_ADOPTION_ORPHAN_AUTO_ACCEPT
+				}
+				scope:secondary_recipient ?= {
+					NOT = { lasombra_court_shadow_adoption_needs_custodian_consent_trigger = yes }
+				}
+			}
+			AND = {
+				custom_description = {
+					text = spending_hook
+					subject = scope:actor
+					object = scope:recipient
+				}
+				scope:compensation_hook = yes
+				scope:actor = { has_strong_hook = scope:recipient }
+			}
+		}
+	}
+
+	cost = {
+		renown = {
+			value = scope:actor.dynasty.medium_dynasty_prestige_value
+			if = {
+				limit = { scope:compensation_hook = yes }
+				multiply = 0.5
+			}
+		}
+		gold = {
+			value = 0
+			if = {
+				limit = {
+					scope:compensation_gold = yes
+					scope:secondary_recipient ?= {
+						lasombra_court_shadow_adoption_needs_custodian_consent_trigger = yes
+					}
+				}
+				add = lasombra_court_shadow_adoption_gold_cost
+			}
+		}
+		prestige = {
+			value = 0
+			if = {
+				limit = {
+					scope:compensation_prestige = yes
+					scope:secondary_recipient ?= {
+						lasombra_court_shadow_adoption_needs_custodian_consent_trigger = yes
+					}
+				}
+				add = lasombra_court_shadow_adoption_prestige_cost
+			}
+		}
+		piety = {
+			value = 0
+			if = {
+				limit = {
+					scope:compensation_piety = yes
+					scope:secondary_recipient ?= {
+						lasombra_court_shadow_adoption_needs_custodian_consent_trigger = yes
+					}
+				}
+				add = lasombra_court_shadow_adoption_piety_cost
+			}
+		}
+	}
+
+	ai_accept = {
+		base = 15
+
+		modifier = {
+			add = 50
+			desc = EDUCATE_CHILD_ACTOR_IS_MY_LIEGE
+			trigger = {
+				scope:recipient = { target_is_liege_or_above = scope:actor }
+			}
+		}
+
+		modifier = {
+			add = 25
+			desc = lasombra_court_shadow_adoption_ai_liege_request
+			trigger = {
+				scope:recipient = { is_vassal_of = scope:actor }
+			}
+		}
+
+		modifier = {
+			add = 40
+			desc = lasombra_court_shadow_adoption_ai_gold_tribute
+			trigger = { scope:compensation_gold = yes }
+		}
+
+		modifier = {
+			add = 30
+			desc = lasombra_court_shadow_adoption_ai_prestige_gift
+			trigger = {
+				scope:compensation_prestige = yes
+				scope:recipient = {
+					OR = {
+						has_trait = ambitious
+						has_trait = arrogant
+					}
+				}
+			}
+		}
+
+		modifier = {
+			add = 22
+			desc = lasombra_court_shadow_adoption_ai_prestige_gift
+			trigger = {
+				scope:compensation_prestige = yes
+				scope:recipient = {
+					NOR = {
+						has_trait = ambitious
+						has_trait = arrogant
+					}
+				}
+			}
+		}
+
+		modifier = {
+			add = 28
+			desc = lasombra_court_shadow_adoption_ai_piety_offering
+			trigger = {
+				scope:compensation_piety = yes
+				scope:recipient = {
+					OR = {
+						has_trait = zealous
+						has_trait = diligent
+					}
+				}
+			}
+		}
+
+		modifier = {
+			add = 20
+			desc = lasombra_court_shadow_adoption_ai_piety_offering
+			trigger = {
+				scope:compensation_piety = yes
+				scope:recipient = {
+					NOR = {
+						has_trait = zealous
+						has_trait = diligent
+					}
+				}
+			}
+		}
+
+		modifier = {
+			add = 35
+			desc = lasombra_court_shadow_adoption_ai_dread_coercion
+			trigger = {
+				scope:compensation_dread = yes
+			}
+		}
+
+		modifier = {
+			add = intimidated_external_reason_value
+			desc = INTIMIDATED_REASON
+			trigger = {
+				scope:compensation_dread = yes
+				scope:recipient = {
+					has_dread_level_towards = {
+						target = scope:actor
+						level = 1
+					}
+				}
+			}
+		}
+
+		modifier = {
+			add = cowed_external_reason_value
+			desc = COWED_REASON
+			trigger = {
+				scope:compensation_dread = yes
+				scope:recipient = {
+					has_dread_level_towards = {
+						target = scope:actor
+						level = 2
+					}
+				}
+			}
+		}
+
+		modifier = {
+			add = 100
+			desc = SCHEME_WEAK_HOOK_USED
+			trigger = {
+				scope:compensation_hook = yes
+				scope:actor = { NOT = { has_strong_hook = scope:recipient } }
+			}
+		}
+
+		modifier = {
+			add = 45
+			desc = lasombra_court_shadow_adoption_ai_lowborn_child
+			trigger = {
+				scope:secondary_recipient ?= { is_lowborn = yes }
+			}
+		}
+
+		modifier = {
+			add = 25
+			desc = lasombra_court_shadow_adoption_ai_lowborn_parent
+			trigger = {
+				scope:recipient = { is_lowborn = yes }
+			}
+		}
+
+		modifier = {
+			add = 35
+			desc = lasombra_court_shadow_adoption_ai_already_ward
+			trigger = {
+				scope:secondary_recipient ?= { has_relation_guardian = scope:actor }
+			}
+		}
+
+		modifier = {
+			add = 20
+			desc = lasombra_court_shadow_adoption_ai_actor_rank
+			trigger = {
+				scope:actor = {
+					tier_difference = {
+						target = scope:recipient
+						value >= 1
+					}
+				}
+			}
+		}
+
+		modifier = {
+			add = 30
+			desc = lasombra_court_shadow_adoption_ai_actor_rank
+			trigger = {
+				scope:actor = {
+					tier_difference = {
+						target = scope:recipient
+						value >= 2
+					}
+				}
+			}
+		}
+
+		opinion_modifier = {
+			who = scope:recipient
+			opinion_target = scope:actor
+			multiplier = 0.5
+			desc = AI_OPINION_REASON
+		}
+
+		modifier = {
+			add = -25
+			desc = lasombra_court_shadow_adoption_ai_bad_opinion
+			trigger = {
+				scope:recipient = {
+					opinion = {
+						target = scope:actor
+						value <= medium_negative_opinion
+					}
+				}
+			}
+		}
+
+		modifier = {
+			add = -40
+			desc = lasombra_court_shadow_adoption_ai_heir_refusal
+			trigger = {
+				exists = scope:secondary_recipient
+				scope:secondary_recipient = { lasombra_court_shadow_adoption_heir_sensitive_trigger = yes }
+				NOR = {
+					scope:compensation_hook = yes
+					scope:compensation_dread = yes
+				}
+			}
+		}
+
+		modifier = {
+			add = -15
+			desc = lasombra_court_shadow_adoption_ai_only_child
+			trigger = {
+				exists = scope:secondary_recipient
+				scope:secondary_recipient = {
+					any_sibling = { count = 0 }
+					NOT = { lasombra_court_shadow_adoption_heir_sensitive_trigger = yes }
+				}
+			}
+		}
+
+		modifier = {
+			add = 15
+			desc = lasombra_court_shadow_adoption_ai_ambitious_child
+			trigger = {
+				exists = scope:secondary_recipient
+				scope:secondary_recipient = { has_trait = ambitious }
+			}
+		}
+
+		modifier = {
+			add = 10
+			desc = lasombra_court_shadow_adoption_ai_compassionate_parent
+			trigger = {
+				scope:recipient = { has_trait = compassionate }
+			}
+		}
+	}
+
+	on_accept = {
+		lasombra_court_shadow_adoption_finish_effect = yes
+	}
+
+	on_decline = {
+		scope:recipient = {
+			add_opinion = {
+				target = scope:actor
+				modifier = disappointed_opinion
+				opinion = -15
+			}
+		}
+		scope:actor = {
+			send_interface_toast = {
+				type = event_toast_effect_bad
+				title = lasombra_court_shadow_adoption_decline_toast_title
+				left_icon = scope:secondary_recipient
+				right_icon = scope:recipient
+				custom_tooltip = lasombra_court_shadow_adoption_decline_toast_desc
+			}
+		}
+	}
+}

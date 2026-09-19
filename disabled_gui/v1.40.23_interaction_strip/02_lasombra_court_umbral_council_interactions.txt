@@ -1,0 +1,130 @@
+# Fallback appoint path when the council picker glitches on custom seats.
+
+lasombra_court_appoint_umbral_councillor_interaction = {
+	category = interaction_category_friendly
+	common_interaction = yes
+	interface_priority = 45
+	desc = lasombra_court_appoint_umbral_councillor_interaction_desc
+	icon = council
+	ai_frequency = 0
+	send_options_exclusive = yes
+
+	is_shown = {
+		scope:actor = {
+			lasombra_court_can_employ_umbral_council_trigger = yes
+			is_adult = yes
+		}
+		scope:recipient = {
+			is_adult = yes
+			NOT = { this = scope:actor }
+			OR = {
+				is_courtier_of = scope:actor
+				is_knight_of = scope:actor
+				is_vassal_of = scope:actor
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			is_imprisoned = no
+			is_hostage = no
+		}
+	}
+
+	send_option = {
+		flag = warden
+		localization = lasombra_court_appoint_warden_option
+		is_valid = {
+			scope:recipient = {
+				lasombra_court_can_be_warden_councillor_trigger = { COURT_OWNER = scope:actor }
+			}
+		}
+	}
+
+	send_option = {
+		flag = legate
+		localization = lasombra_court_appoint_legate_option
+		is_valid = {
+			scope:recipient = {
+				lasombra_court_can_be_legate_councillor_trigger = { COURT_OWNER = scope:actor }
+			}
+		}
+	}
+
+	send_option = {
+		flag = curator
+		localization = lasombra_court_appoint_curator_option
+		is_valid = {
+			scope:recipient = {
+				lasombra_court_can_be_curator_councillor_trigger = { COURT_OWNER = scope:actor }
+			}
+		}
+	}
+
+	send_option = {
+		flag = chancellor
+		localization = lasombra_court_appoint_chancellor_option
+		is_valid = {
+			scope:recipient = {
+				lasombra_court_can_be_chancellor_councillor_trigger = { COURT_OWNER = scope:actor }
+			}
+		}
+	}
+
+	send_option = {
+		flag = seneschal
+		localization = lasombra_court_appoint_seneschal_option
+		is_valid = {
+			scope:recipient = {
+				lasombra_court_can_be_seneschal_councillor_trigger = { COURT_OWNER = scope:actor }
+			}
+		}
+	}
+
+	on_accept = {
+		scope:actor = {
+			if = {
+				limit = { scope:warden = yes }
+				assign_councillor_type = {
+					type = lasombra_court_councillor_warden
+					target = scope:recipient
+					remove_existing_councillor = yes
+				}
+			}
+			else_if = {
+				limit = { scope:legate = yes }
+				assign_councillor_type = {
+					type = lasombra_court_councillor_legate
+					target = scope:recipient
+					remove_existing_councillor = yes
+				}
+			}
+			else_if = {
+				limit = { scope:curator = yes }
+				assign_councillor_type = {
+					type = lasombra_court_councillor_curator
+					target = scope:recipient
+					remove_existing_councillor = yes
+				}
+			}
+			else_if = {
+				limit = { scope:chancellor = yes }
+				assign_councillor_type = {
+					type = lasombra_court_councillor_chancellor
+					target = scope:recipient
+					remove_existing_councillor = yes
+				}
+			}
+			else_if = {
+				limit = { scope:seneschal = yes }
+				assign_councillor_type = {
+					type = lasombra_court_councillor_seneschal
+					target = scope:recipient
+					remove_existing_councillor = yes
+				}
+			}
+			lasombra_court_init_umbral_council_positions_effect = yes
+		}
+	}
+}

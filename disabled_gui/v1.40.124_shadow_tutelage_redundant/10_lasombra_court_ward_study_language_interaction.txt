@@ -1,0 +1,273 @@
+﻿# Court of Shadows — Ward / family language study (v1.40.123)
+# SAFE redesign: does NOT override vanilla make_child_learn_language_interaction.
+# Does NOT reassign scope:recipient in redirect (that crashed right-click portraits).
+# Right-click the child; pick a language source (secondary_actor) from actor list.
+
+lasombra_court_ward_study_language_interaction = {
+	category = interaction_category_friendly
+	common_interaction = yes
+	icon = icon_scheme_learn_language
+	interface_priority = 40
+
+	desc = lasombra_court_ward_study_language_interaction_desc
+	send_name = lasombra_court_ward_study_language_interaction_send
+	greeting = positive
+	notification_text = lasombra_court_ward_study_language_notification
+
+	# Safe redirect: only secondaries. Never overwrite scope:recipient.
+	redirect = {
+		scope:recipient = {
+			save_scope_as = secondary_recipient
+		}
+		# Prefer a default language teacher when possible (player can change via list)
+		scope:actor = {
+			if = {
+				limit = {
+					exists = scope:secondary_recipient
+					scope:secondary_recipient = {
+						can_start_scheme = { type = learn_language target_character = prev }
+					}
+				}
+				save_scope_as = secondary_actor
+			}
+			else_if = {
+				limit = {
+					exists = scope:secondary_recipient
+					any_courtier = {
+						is_physically_able_adult = yes
+						scope:secondary_recipient = {
+							can_start_scheme = { type = learn_language target_character = prev }
+						}
+					}
+				}
+				random_courtier = {
+					limit = {
+						is_physically_able_adult = yes
+						scope:secondary_recipient = {
+							can_start_scheme = { type = learn_language target_character = prev }
+						}
+					}
+					save_scope_as = secondary_actor
+				}
+			}
+			else_if = {
+				limit = {
+					exists = scope:secondary_recipient
+					any_vassal = {
+						is_physically_able_adult = yes
+						scope:secondary_recipient = {
+							can_start_scheme = { type = learn_language target_character = prev }
+						}
+					}
+				}
+				random_vassal = {
+					limit = {
+						is_physically_able_adult = yes
+						scope:secondary_recipient = {
+							can_start_scheme = { type = learn_language target_character = prev }
+						}
+					}
+					save_scope_as = secondary_actor
+				}
+			}
+		}
+	}
+
+	# Language source (who the child studies against)
+	populate_actor_list = {
+		scope:actor = {
+			if = {
+				limit = {
+					is_physically_able_adult = yes
+					exists = scope:secondary_recipient
+					scope:secondary_recipient = {
+						can_start_scheme = { type = learn_language target_character = prev }
+					}
+				}
+				add_to_list = characters
+			}
+			every_courtier = {
+				limit = {
+					is_physically_able_adult = yes
+					exists = scope:secondary_recipient
+					scope:secondary_recipient = {
+						can_start_scheme = { type = learn_language target_character = prev }
+					}
+				}
+				add_to_list = characters
+			}
+			every_vassal = {
+				limit = {
+					is_physically_able_adult = yes
+					exists = scope:secondary_recipient
+					scope:secondary_recipient = {
+						can_start_scheme = { type = learn_language target_character = prev }
+					}
+				}
+				add_to_list = characters
+			}
+		}
+	}
+
+	is_shown = {
+		has_ep1_court_positions_dlc_trigger = yes
+		scope:actor = {
+			is_playable_character = yes
+			is_adult = yes
+		}
+		scope:recipient = {
+			is_adult = no
+			is_physically_able = yes
+			age >= 6
+			is_ai = yes
+			OR = {
+				is_in_the_same_court_as = scope:actor
+				scope:actor = { has_relation_ward = prev }
+			}
+			lasombra_court_child_study_language_child_trigger = {
+				GUARDIAN = scope:actor
+				CHILD = this
+			}
+		}
+	}
+
+	is_valid = {
+		scope:actor = {
+			OR = {
+				employs_court_position = court_tutor_court_position
+				employs_court_position = court_guru_court_position
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			is_imprisoned = no
+			NOT = { has_trait = incapable }
+			custom_tooltip = {
+				text = ward_travelling_tt
+				NOT = { exists = var:ward_travelling_to_guardian }
+			}
+		}
+		custom_tooltip = {
+			text = NOT_LASOMBRA_COURT_WARD_STUDY_NEEDS_TUTOR
+			scope:actor = {
+				OR = {
+					employs_court_position = court_tutor_court_position
+					employs_court_position = court_guru_court_position
+				}
+			}
+		}
+		trigger_if = {
+			limit = { exists = scope:secondary_actor }
+			scope:secondary_actor = {
+				is_imprisoned = no
+				NOT = { has_trait = incapable }
+			}
+		}
+		trigger_if = {
+			limit = { exists = scope:secondary_recipient }
+			scope:secondary_recipient = {
+				is_adult = no
+				is_physically_able = yes
+				age >= 6
+				lasombra_court_child_study_language_child_trigger = {
+					GUARDIAN = scope:actor
+					CHILD = this
+				}
+				custom_description = {
+					text = already_scheming_language
+					NOT = {
+						any_scheme = {
+							type = learn_language
+						}
+					}
+				}
+			}
+			custom_description = {
+				text = no_target_language
+				scope:actor = {
+					OR = {
+						scope:secondary_recipient = {
+							can_start_scheme = { type = learn_language target_character = prev }
+						}
+						any_courtier = {
+							scope:secondary_recipient = {
+								can_start_scheme = { type = learn_language target_character = prev }
+							}
+						}
+						any_vassal = {
+							scope:secondary_recipient = {
+								can_start_scheme = { type = learn_language target_character = prev }
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger_if = {
+			limit = {
+				exists = scope:secondary_actor
+				exists = scope:secondary_recipient
+			}
+			scope:secondary_actor = {
+				scope:secondary_recipient = {
+					can_start_scheme = { type = learn_language target_character = prev }
+				}
+			}
+		}
+	}
+
+	can_be_picked = {
+		is_at_home = yes
+	}
+
+	on_accept = {
+		# Use secondary_recipient (child); fall back to recipient if redirect skipped
+		if = {
+			limit = {
+				OR = {
+					exists = scope:secondary_recipient
+					exists = scope:recipient
+				}
+				exists = scope:secondary_actor
+			}
+			if = {
+				limit = { NOT = { exists = scope:secondary_recipient } }
+				scope:recipient = { save_scope_as = secondary_recipient }
+			}
+			scope:actor = {
+				send_interface_message = {
+					type = event_childhood_neutral
+					title = lasombra_court_ward_study_language_toast_title
+					left_icon = scope:secondary_recipient
+					right_icon = scope:secondary_actor
+					scope:secondary_recipient = {
+						custom_tooltip = secondary_actors_language
+						begin_scheme_basic_effect = {
+							SCHEME_TYPE = learn_language
+							TARGET_TYPE = target_character
+							TARGET_SCOPE = scope:secondary_actor
+						}
+						lasombra_court_apply_court_tutor_language_rank_modifier_effect = yes
+					}
+				}
+			}
+		}
+	}
+
+	auto_accept = yes
+
+	ai_accept = {
+		base = 100
+	}
+
+	# Player-focused; AI can use rarely
+	ai_frequency = 0
+	ai_potential = {
+		always = no
+	}
+	ai_will_do = {
+		base = 0
+	}
+}

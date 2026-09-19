@@ -1,0 +1,15 @@
+# Grant starting innovations whenever a character actually joins Umbral culture.
+
+on_character_culture_change = {
+	on_actions = { lasombra_court_on_character_culture_change }
+}
+
+lasombra_court_on_character_culture_change = {
+	effect = {
+		if = {
+			limit = { culture = culture:lasombra_court }
+			add_character_flag = lasombra_court_new_campaign_full_council
+			culture = { lasombra_court_grant_starting_innovations_effect = yes }
+		}
+	}
+}

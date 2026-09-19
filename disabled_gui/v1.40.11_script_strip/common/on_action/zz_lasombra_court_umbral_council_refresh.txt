@@ -1,0 +1,34 @@
+# Re-bind Umbral council slots after culture or faith changes mid-campaign.
+
+on_character_culture_change = {
+	on_actions = { lasombra_court_on_character_culture_change }
+}
+
+on_character_faith_change = {
+	on_actions = { lasombra_court_on_character_faith_change }
+}
+
+lasombra_court_on_character_culture_change = {
+	effect = {
+		if = {
+			limit = { lasombra_court_can_employ_umbral_council_trigger = yes }
+			lasombra_court_init_umbral_council_positions_effect = yes
+		}
+	}
+}
+
+lasombra_court_on_character_faith_change = {
+	effect = {
+		if = {
+			limit = {
+				has_character_flag = lasombra_court_via_tenebrarum_faith_locked
+				NOT = { faith = faith:via_tenebrarum }
+			}
+			set_character_faith = faith:via_tenebrarum
+		}
+		if = {
+			limit = { lasombra_court_can_employ_umbral_council_trigger = yes }
+			lasombra_court_init_umbral_council_positions_effect = yes
+		}
+	}
+}

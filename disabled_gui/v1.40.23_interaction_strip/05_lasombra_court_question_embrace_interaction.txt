@@ -1,0 +1,46 @@
+# Court of Shadows — Question Embrace (player-initiated embrace petition).
+
+lasombra_court_question_embrace_interaction = {
+	category = interaction_category_vampire
+	common_interaction = yes
+	interface_priority = 43
+	icon = icon_scheme
+	ai_frequency = 0
+
+	desc = lasombra_court_question_embrace_interaction_desc
+	send_name = lasombra_court_question_embrace_interaction_send
+	notification_text = lasombra_court_question_embrace_interaction_notification
+
+	cooldown = { years = 1 }
+	auto_accept = yes
+
+	is_shown = {
+		scope:actor = {
+			lasombra_court_embrace_petition_player_sire_trigger = yes
+		}
+		scope:recipient = {
+			lasombra_court_question_embrace_recipient_shown_trigger = { SIRE = scope:actor }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			is_imprisoned = no
+			is_at_war = no
+			lasombra_court_question_embrace_actor_can_initiate_trigger = { RECIPIENT = scope:recipient }
+		}
+		scope:recipient = {
+			lasombra_court_question_embrace_recipient_valid_trigger = { SIRE = scope:actor }
+		}
+	}
+
+	on_accept = {
+		scope:actor = {
+			lasombra_court_sanitize_stale_character_vars_effect = yes
+			lasombra_court_embrace_petition_question_embrace_effect = {
+				PETITIONER = scope:recipient
+				SIRE = scope:actor
+			}
+		}
+	}
+}

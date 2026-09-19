@@ -1,0 +1,80 @@
+# Court of Shadows — Grant the Umbral Crossing (custom embrace ceremony).
+
+lasombra_court_umbral_crossing_interaction = {
+	category = interaction_category_vampire
+	common_interaction = yes
+	interface_priority = 84
+	scheme = lasombra_court_umbral_crossing
+	icon = icon_scheme_vampire
+	ai_frequency = 6
+
+	desc = lasombra_court_umbral_crossing_interaction_desc
+	send_name = lasombra_court_umbral_crossing_interaction_send
+	notification_text = lasombra_court_umbral_crossing_interaction_notification
+
+	is_shown = {
+		scope:actor != scope:recipient
+		scope:actor = {
+			lasombra_court_umbral_crossing_sire_trigger = yes
+		}
+		scope:recipient = {
+			lasombra_court_umbral_crossing_valid_target_trigger = { SIRE = scope:actor }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			is_imprisoned = no
+			lasombra_court_umbral_crossing_can_start_trigger = yes
+			POD_can_embrace = {
+				SIRE = scope:actor
+				CHILDE = scope:recipient
+			}
+			can_start_scheme = {
+				type = lasombra_court_umbral_crossing
+				target_character = scope:recipient
+			}
+		}
+		scope:recipient = { is_imprisoned = no }
+	}
+
+	on_accept = {
+		hidden_effect = {
+			scope:actor = {
+				lasombra_court_sanitize_stale_character_vars_effect = yes
+				start_scheme = {
+					type = lasombra_court_umbral_crossing
+					target_character = scope:recipient
+				}
+			}
+		}
+	}
+
+	auto_accept = yes
+
+	ai_will_do = {
+		base = 0
+		modifier = {
+			add = 50
+			scope:recipient = {
+				lasombra_court_embrace_petitioner_is_lover_trigger = { SIRE = scope:actor }
+			}
+		}
+		modifier = {
+			add = 35
+			scope:recipient = {
+				lasombra_court_embrace_petitioner_is_ghoul_trigger = { DOMITOR = scope:actor }
+			}
+		}
+		modifier = {
+			add = 20
+			scope:recipient = {
+				lasombra_court_embrace_petitioner_child_trigger = { SIRE = scope:actor }
+			}
+		}
+		modifier = {
+			add = 15
+			scope:actor = { has_trait = lustful }
+		}
+	}
+}

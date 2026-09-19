@@ -1,0 +1,451 @@
+﻿# Court of Shadows — Have Child Study Language also works on wards (v1.37.0).
+
+make_child_learn_language_interaction = {
+	category = interaction_category_friendly
+	common_interaction = yes
+	icon = icon_scheme_learn_language
+
+	send_name = study_language
+
+	desc = make_child_learn_language_interaction_desc
+
+	redirect = {
+		scope:actor = {
+			if = {
+				limit = {
+					scope:recipient = {
+						can_start_scheme = { type = learn_language target_character = prev }
+					}
+				}
+				save_scope_as = secondary_actor
+			}
+			else_if = {
+				limit = {
+					any_courtier = {
+						scope:recipient = {
+							can_start_scheme = { type = learn_language target_character = prev }
+						}
+					}
+				}
+				random_courtier = {
+					limit = {
+						scope:recipient = {
+							can_start_scheme = { type = learn_language target_character = prev }
+						}
+					}
+					save_scope_as = secondary_actor
+				}
+			}
+			else_if = {
+				limit = {
+					any_vassal = {
+						scope:recipient = {
+							can_start_scheme = { type = learn_language target_character = prev }
+						}
+					}
+				}
+				random_vassal = {
+					limit = {
+						scope:recipient = {
+							can_start_scheme = { type = learn_language target_character = prev }
+						}
+					}
+					save_scope_as = secondary_actor
+				}
+			}
+		}
+		scope:recipient = {
+			save_scope_as = secondary_recipient
+
+			if = {
+				limit = {
+					exists = employer
+					employer != scope:recipient
+				}
+
+				employer = {
+					save_scope_as = recipient
+				}
+			}
+		}
+	}
+
+	populate_actor_list = {
+		scope:actor = {
+			if = {
+				limit = {
+					is_physically_able_adult = yes
+					exists = scope:secondary_recipient
+					scope:secondary_recipient = {
+						can_start_scheme = { type = learn_language target_character = prev }
+					}
+				}
+				add_to_list = characters
+			}
+			every_courtier = {
+				limit = {
+					is_physically_able_adult = yes
+					exists = scope:secondary_recipient
+					scope:secondary_recipient = {
+						can_start_scheme = { type = learn_language target_character = prev }
+					}
+				}
+				add_to_list = characters
+			}
+			every_vassal = {
+				limit = {
+					is_physically_able_adult = yes
+					exists = scope:secondary_recipient
+					scope:secondary_recipient = {
+						can_start_scheme = { type = learn_language target_character = prev }
+					}
+				}
+				add_to_list = characters
+			}
+			if = {
+				limit = {
+					NOT = {
+						exists = scope:secondary_recipient
+					}
+				}
+				every_courtier = {
+					limit = {
+						is_physically_able_adult = yes
+					}
+					add_to_list = characters
+				}
+				every_vassal = {
+					limit = {
+						is_physically_able_adult = yes
+					}
+					add_to_list = characters
+				}
+			}
+		}
+	}
+
+	populate_recipient_list = {
+		scope:recipient = {
+			every_courtier = {
+				limit = {
+					is_adult = no
+					is_physically_able = yes
+					age >= 6
+					lasombra_court_child_study_language_child_trigger = { GUARDIAN = scope:actor CHILD = prev }
+					is_ai = yes
+				}
+				add_to_list = characters
+			}
+		}
+	}
+
+	greeting = positive
+	notification_text = {
+		desc = MAKE_LEARN_LANGUAGE_REQUEST
+	}
+
+	prompt = {
+		desc = SELECT_TARGET_LANGUAGE_SCHEME
+	}
+
+	is_shown = {
+		has_ep1_court_positions_dlc_trigger = yes
+		scope:recipient = {
+			is_in_the_same_court_as = scope:actor
+		}
+		trigger_if = {
+			limit = {
+				exists = scope:secondary_recipient
+			}
+			scope:secondary_recipient = {
+				is_adult = no
+				is_ai = yes
+			}
+		}
+		POD_interaction_is_shown = yes
+	}
+
+	is_valid = {
+		scope:actor = {
+			OR = {
+				employs_court_position = court_tutor_court_position
+				employs_court_position = court_guru_court_position
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			is_imprisoned = no
+			NOT = { has_trait = incapable }
+		}
+		trigger_if = {
+			limit = {
+				exists = scope:secondary_actor
+			}
+			scope:secondary_actor = {
+				is_imprisoned = no
+				NOT = { has_trait = incapable }
+			}
+		}
+		trigger_if = {
+			limit = {
+				exists = scope:secondary_recipient
+			}
+			scope:secondary_recipient = {
+				is_adult = no
+				is_physically_able = yes
+				age >= 6
+				lasombra_court_child_study_language_child_trigger = { GUARDIAN = scope:actor CHILD = scope:secondary_recipient }
+				custom_description = {
+					text = already_scheming_language
+					NOT = {
+						any_scheme = {
+							type = learn_language
+						}
+					}
+				}
+			}
+			custom_description = {
+				text = no_target_language
+				scope:actor = {
+					OR = {
+						scope:secondary_recipient = {
+							can_start_scheme = { type = learn_language target_character = prev }
+						}
+						any_courtier = {
+							scope:secondary_recipient = {
+								can_start_scheme = { type = learn_language target_character = prev }
+							}
+						}
+						any_vassal = {
+							scope:secondary_recipient = {
+								can_start_scheme = { type = learn_language target_character = prev }
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger_if = {
+			limit = {
+				exists = scope:secondary_actor
+				exists = scope:secondary_recipient
+			}
+			scope:secondary_actor = {
+				scope:secondary_recipient = {
+					can_start_scheme = { type = learn_language target_character = prev }
+				}
+			}
+		}
+	}
+
+	can_be_picked = {
+		is_at_home = yes
+	}
+
+	on_accept = {
+		scope:actor = {
+			send_interface_message = {
+				type = event_childhood_neutral
+				title = make_child_learn_language_interaction_notification
+				left_icon = scope:secondary_recipient
+				right_icon = scope:secondary_actor
+				scope:secondary_recipient = {
+					custom_tooltip = secondary_actors_language
+					begin_scheme_basic_effect = {
+						SCHEME_TYPE = learn_language
+						TARGET_TYPE = target_character
+						TARGET_SCOPE = scope:secondary_actor
+					}
+					if = {
+						limit = {
+							scope:actor = {
+								OR = {
+									AND = {
+										exists = court_position:court_tutor_court_position
+										court_position:court_tutor_court_position = {
+											aptitude:court_tutor_court_position = 1
+										}
+									}
+									AND = {
+										exists = court_position:court_guru_court_position
+										court_position:court_guru_court_position = {
+											aptitude:court_guru_court_position = 1
+										}
+									}
+								}
+							}
+						}
+						custom_tooltip = court_tutor_child_language_rank_1
+						hidden_effect = {
+							random_scheme = {
+								type = learn_language
+								add_scheme_modifier = {
+									type = court_tutor_child_language_rank_1_modifier
+								}
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							scope:actor = {
+								OR = {
+									AND = {
+										exists = court_position:court_tutor_court_position
+										court_position:court_tutor_court_position = {
+											aptitude:court_tutor_court_position = 2
+										}
+									}
+									AND = {
+										exists = court_position:court_guru_court_position
+										court_position:court_guru_court_position = {
+											aptitude:court_guru_court_position = 2
+										}
+									}
+								}
+							}
+						}
+						custom_tooltip = court_tutor_child_language_rank_2
+						hidden_effect = {
+							random_scheme = {
+								type = learn_language
+								add_scheme_modifier = {
+									type = court_tutor_child_language_rank_2_modifier
+								}
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							scope:actor = {
+								OR = {
+									AND = {
+										exists = court_position:court_tutor_court_position
+										court_position:court_tutor_court_position = {
+											aptitude:court_tutor_court_position = 3
+										}
+									}
+									AND = {
+										exists = court_position:court_guru_court_position
+										court_position:court_guru_court_position = {
+											aptitude:court_guru_court_position = 3
+										}
+									}
+								}
+							}
+						}
+						custom_tooltip = court_tutor_child_language_rank_3
+						hidden_effect = {
+							random_scheme = {
+								type = learn_language
+								add_scheme_modifier = {
+									type = court_tutor_child_language_rank_3_modifier
+								}
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							scope:actor = {
+								OR = {
+									AND = {
+										exists = court_position:court_tutor_court_position
+										court_position:court_tutor_court_position = {
+											aptitude:court_tutor_court_position = 4
+										}
+									}
+									AND = {
+										exists = court_position:court_guru_court_position
+										court_position:court_guru_court_position = {
+											aptitude:court_guru_court_position = 4
+										}
+									}
+								}
+							}
+						}
+						custom_tooltip = court_tutor_child_language_rank_4
+						hidden_effect = {
+							random_scheme = {
+								type = learn_language
+								add_scheme_modifier = {
+									type = court_tutor_child_language_rank_4_modifier
+								}
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							scope:actor = {
+								OR = {
+									AND = {
+										exists = court_position:court_tutor_court_position
+										court_position:court_tutor_court_position = {
+											aptitude:court_tutor_court_position = 5
+										}
+									}
+									AND = {
+										exists = court_position:court_guru_court_position
+										court_position:court_guru_court_position = {
+											aptitude:court_guru_court_position = 5
+										}
+									}
+								}
+							}
+						}
+						custom_tooltip = court_tutor_child_language_rank_5
+						hidden_effect = {
+							random_scheme = {
+								type = learn_language
+								add_scheme_modifier = {
+									type = court_tutor_child_language_rank_5_modifier
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	auto_accept = yes
+
+	ai_accept = {
+		base = 100
+	}
+
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 240
+		duchy = 72
+		kingdom = 36
+		empire = 36
+		hegemony = 36
+	}
+
+	ai_targets = {
+		ai_recipients = children
+		max = 5
+	}
+
+	ai_potential = {
+		has_ep1_court_positions_dlc_trigger = yes
+		OR = {
+			employs_court_position = court_tutor_court_position
+			employs_court_position = court_guru_court_position
+		}
+		primary_title.tier >= tier_county
+	}
+
+	ai_will_do = {
+		base = 0
+
+		modifier = { # The AI wants to prepare their children for ruling their vassals
+			add = 100
+			any_vassal = {
+				primary_title.tier >= tier_county
+				knows_language_of_culture = scope:secondary_actor.culture
+			}
+		}
+	}
+}

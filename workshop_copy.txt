@@ -1,0 +1,70 @@
+# Court of Shadows — Workshop copy (paste into Steam)
+
+## Short Description
+(≤ ~160–200 characters; Steam short blurb)
+
+Lasombra culture, Via Tenebrarum, and an Umbral court for Princes of Darkness — ceremonies, council, and the Long Night.
+
+---
+
+## Description
+(Full Workshop description)
+
+[h1]Court of Shadows[/h1]
+[b]Lasombra culture & faith for Princes of Darkness[/b]
+
+An Umbral companion for [b]Princes of Darkness[/b]: courtly Lasombra culture, Via Tenebrarum, and rites of shadow, desire, and blood. Build a Court of Shadows, guide childer through sacrament, and rule the night as doctrine.
+
+[h2]Requires[/h2]
+[list]
+[*] [b]Princes of Darkness[/b]
+[*] [b]More Tenets Slots[/b]
+[*] [b]More Tenets Slots – Princes of Darkness-Patch[/b]
+[/list]
+
+[h2]Load order[/h2]
+[olist]
+[*] Princes of Darkness
+[*] More Tenets Slots
+[*] More Tenets Slots – Princes of Darkness-Patch
+[*] Court of Shadows
+[/olist]
+
+[i]Vamp-Stable GUI Patch is optional (portrait/GUI stability). Not required for this mod.[/i]
+
+[h2]What you get[/h2]
+[list]
+[*] [b]Umbral culture & Via Tenebrarum[/b] — tenets, ethos, and a faith built for Lasombra courts (includes Communion-style indulgences support and Nox Nuda)
+[*] [b]Umbral Crossing[/b] — Court sacrament of the Embrace (scheme + ceremony), separate from Question Embrace trials
+[*] [b]Umbral Baptism[/b], Shadow Adoption, and household language study
+[*] [b]Umbral Council & court positions[/b] — specialized seats and tasks for a shadowed realm
+[*] [b]Salon of Night lifestyle[/b] and [b]Grant Lifestyle Access[/b] for unlanded prodigies under your rule (courtiers, vassals, spouses, concubines, children)
+[*] Activities & court life — Black Chapel Procession, Veiled Pursuit, Umbral Orgy, consorts, Mirrorless Court, Black Ledger, and more
+[*] Dynasty renown package for Court of Shadows play (HoF / dominion / conversion / holy sites support)
+[/list]
+
+[h2]Notes[/h2]
+[list]
+[*] Designed for [b]CK3 1.19[/b] with current PoD
+[*] [b]Nox Nuda[/b] is the faith-layer for naked adherents; Crossing ceremony portraits stay clothed for stability
+[*] If a Question Embrace trial gets stuck, use the [b]Abandon Embrace Trial[/b] decision
+[*] Debug decisions are debug-mode only and not part of normal play
+[/list]
+
+[h2]Not required[/h2]
+Other vampire GUI/portrait patches, Infinite Wards, or beauty mods. Add those only if you want them for their own features.
+
+[h2]Feedback[/h2]
+Report load order, PoD version, and what you were doing if something breaks. Thanks for playing in the dark.
+
+---
+
+## Changelog (1.40.132)
+[list]
+[*] Umbral Crossing stability (scheme validity, safe event themes, no nude-portrait path)
+[*] Crossing failure-tooltip localization
+[*] Embrace parent-rewire age guard (soft log noise)
+[*] Grant Lifestyle Access limited to your court / subjects / household
+[*] Opinion localization fixes (Mirrorless / Shadow Courting / Ledger)
+[*] Tools folder removed from playable package (dev-only offline)
+[/list]

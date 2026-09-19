@@ -1,0 +1,94 @@
+# Umbral Baptism — bestow a founding Umbral mark on a worthy subject (v1.34.0)
+
+lasombra_court_umbral_baptism_interaction = {
+	category = interaction_category_diplomacy
+	common_interaction = yes
+	interface_priority = 44
+	icon = icon_dynasty
+	ai_frequency = 8
+
+	desc = lasombra_court_umbral_baptism_interaction_desc
+	send_name = lasombra_court_umbral_baptism_interaction_send
+	notification_text = lasombra_court_umbral_baptism_interaction_notification
+
+	cooldown = { years = 3 }
+	auto_accept = yes
+
+	is_shown = {
+		scope:actor = {
+			lasombra_court_umbral_baptism_actor_trigger = yes
+		}
+		scope:recipient = {
+			lasombra_court_umbral_baptism_recipient_shown_trigger = { ACTOR = scope:actor }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			is_imprisoned = no
+			is_at_war = no
+			gold >= lasombra_court_umbral_baptism_gold_cost_value
+			piety >= lasombra_court_umbral_baptism_piety_cost_value
+		}
+		scope:recipient = {
+			lasombra_court_umbral_baptism_recipient_valid_trigger = { ACTOR = scope:actor }
+		}
+	}
+
+	on_accept = {
+		scope:actor = {
+			remove_short_term_gold = lasombra_court_umbral_baptism_gold_cost_value
+			add_piety = {
+				value = lasombra_court_umbral_baptism_piety_cost_value
+				multiply = -1
+			}
+			scope:recipient = { save_scope_as = baptism_recipient }
+			trigger_event = {
+				id = lasombra_court.0150
+				days = 0
+			}
+		}
+	}
+
+	ai_potential = {
+		is_ai = yes
+		is_ruler = yes
+	}
+
+	ai_targets = {
+		ai_recipients = courtiers
+		ai_recipients = vassals
+		ai_recipients = knights
+	}
+
+	ai_will_do = {
+		base = 0
+		modifier = {
+			add = 30
+			scope:recipient = {
+				is_close_family_of = scope:actor
+			}
+		}
+		modifier = {
+			add = 20
+			scope:recipient = {
+				is_councillor_of = scope:actor
+			}
+		}
+		modifier = {
+			add = 15
+			scope:recipient = {
+				is_knight_of = scope:actor
+			}
+		}
+		modifier = {
+			add = 10
+			scope:recipient = {
+				opinion = {
+					target = scope:actor
+					value >= 20
+				}
+			}
+		}
+	}
+}

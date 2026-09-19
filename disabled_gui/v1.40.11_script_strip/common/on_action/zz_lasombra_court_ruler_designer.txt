@@ -1,0 +1,18 @@
+# Preserve Via Tenebrarum chosen in Ruler Designer through PoD chargen (v1.11.8)
+
+on_ruler_designer_finished = {
+	on_actions = { lasombra_court_on_ruler_designer_finished }
+}
+
+lasombra_court_on_ruler_designer_finished = {
+	effect = {
+		if = {
+			limit = { culture = culture:lasombra_court }
+			culture = { lasombra_court_grant_starting_innovations_effect = yes }
+		}
+		if = {
+			limit = { faith = faith:via_tenebrarum }
+			add_character_flag = lasombra_court_rd_via_tenebrarum
+		}
+	}
+}

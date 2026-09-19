@@ -1,0 +1,469 @@
+lasombra_court_embrace_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/lasombra_court_embrace_decision.dds"
+	}
+	decision_group_type = lasombra_court
+
+	ai_check_interval = 0
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					culture = culture:lasombra_court
+					faith = faith:via_tenebrarum
+				}
+				desc = lasombra_court_embrace_decision_desc_founding
+			}
+			desc = lasombra_court_embrace_decision_desc
+		}
+	}
+
+	selection_tooltip = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					culture = culture:lasombra_court
+					faith = faith:via_tenebrarum
+				}
+				desc = lasombra_court_embrace_decision_tooltip_founding
+			}
+			desc = lasombra_court_embrace_decision_tooltip
+		}
+	}
+
+	is_shown = {
+		lasombra_court_embrace_decision_shown_trigger = yes
+	}
+
+	is_valid = {
+		is_adult = yes
+		is_imprisoned = no
+		lasombra_court_embrace_has_pending_work_trigger = yes
+	}
+
+	is_valid_showing_failures_only = {
+		is_at_war = no
+	}
+
+	effect = {
+		lasombra_court_complete_embrace_effect = yes
+		add_piety = 200
+		add_prestige = 150
+		send_interface_toast = {
+			title = lasombra_court_embrace_toast_title
+			left_icon = root
+			custom_tooltip = lasombra_court_embrace_toast_desc
+		}
+	}
+
+	ai_potential = {
+		always = no
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}
+
+lasombra_court_adopt_faith_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/lasombra_court_adopt_faith_decision.dds"
+	}
+	decision_group_type = lasombra_court
+
+	ai_check_interval = 0
+
+	is_shown = {
+		has_trait = lasombra
+		NOT = { faith = faith:via_tenebrarum }
+	}
+
+	is_valid = {
+		is_adult = yes
+		is_imprisoned = no
+	}
+
+	is_valid_showing_failures_only = {
+		is_at_war = no
+	}
+
+	effect = {
+		custom_tooltip = lasombra_court_adopt_faith_decision_effect_tt
+		lasombra_court_adopt_via_tenebrarum_faith_effect = yes
+		hidden_effect = {
+			lasombra_court_init_umbral_council_positions_effect = yes
+		}
+		add_piety = 150
+		send_interface_toast = {
+			title = lasombra_court_adopt_faith_toast_title
+			left_icon = root
+			custom_tooltip = lasombra_court_adopt_faith_toast_desc
+		}
+	}
+
+	ai_potential = {
+		always = no
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}
+
+lasombra_court_adopt_culture_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/lasombra_court_adopt_culture_decision.dds"
+	}
+	decision_group_type = lasombra_court
+
+	ai_check_interval = 0
+
+	is_shown = {
+		has_trait = lasombra
+		NOT = { culture = culture:lasombra_court }
+	}
+
+	is_valid = {
+		is_adult = yes
+		is_imprisoned = no
+	}
+
+	is_valid_showing_failures_only = {
+		is_at_war = no
+	}
+
+	effect = {
+		custom_tooltip = lasombra_court_adopt_culture_decision_effect_tt
+		custom_tooltip = lasombra_court_embrace_culture_effect_tt
+		lasombra_court_adopt_umbral_culture_effect = yes
+		hidden_effect = {
+			lasombra_court_init_umbral_council_positions_effect = yes
+		}
+		add_prestige = 100
+		send_interface_toast = {
+			title = lasombra_court_adopt_culture_toast_title
+			left_icon = root
+			custom_tooltip = lasombra_court_adopt_culture_toast_desc
+		}
+	}
+
+	ai_potential = {
+		always = no
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}
+
+lasombra_court_create_head_of_faith_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_personal_religious.dds"
+	}
+	decision_group_type = lasombra_court
+
+	ai_check_interval = 0
+
+	is_shown = {
+		is_playable_character = yes
+		faith = {
+			religion = religion:bloodgnosticism_religion
+			NOT = { exists = religious_head }
+		}
+	}
+
+	is_valid = {
+		is_adult = yes
+		is_imprisoned = no
+		lasombra_court_can_crown_shadow_pontiff_trigger = yes
+	}
+
+	is_valid_showing_failures_only = {
+		is_at_war = no
+		custom_description = {
+			text = lasombra_court_hof_holder_faith_mismatch
+			faith = {
+				any_holy_site = {
+					county = {
+						is_holy_site_controlled_by = root
+						holder.faith != root.faith
+					}
+				}
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = lasombra_court_create_head_of_faith_decision_effect_tt
+		lasombra_court_crown_shadow_pontiff_effect = yes
+		send_interface_toast = {
+			title = lasombra_court_create_head_of_faith_toast_title
+			left_icon = root
+			custom_tooltip = lasombra_court_create_head_of_faith_toast_desc
+		}
+	}
+
+	ai_potential = {
+		always = no
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}
+
+lasombra_court_search_umbral_consorts_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/lasombra_court_umbral_consort_decision.dds"
+	}
+	decision_group_type = lasombra_court
+
+	cooldown = { years = 1 }
+	ai_check_interval = 0
+
+	is_shown = {
+		has_trait = lasombra
+		OR = {
+			faith = faith:via_tenebrarum
+			culture = culture:lasombra_court
+		}
+		is_playable_character = yes
+	}
+
+	is_valid = {
+		is_adult = yes
+		is_imprisoned = no
+		exists = capital_province
+	}
+
+	is_valid_showing_failures_only = {
+		is_at_war = no
+	}
+
+	cost = {
+		gold = 50
+		piety = 100
+	}
+
+	effect = {
+		custom_tooltip = lasombra_court_search_umbral_consorts_decision_effect_tt
+		trigger_event = {
+			id = lasombra_court.0300
+			days = 5
+		}
+	}
+
+	ai_potential = {
+		always = no
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}
+
+lasombra_court_clear_shadow_adoption_cooldown_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_recruitment.dds"
+	}
+	decision_group_type = debug
+
+	ai_check_interval = 0
+
+	is_shown = {
+		debug_only = yes
+		is_playable_character = yes
+	}
+
+	is_valid = {
+		is_adult = yes
+		is_imprisoned = no
+	}
+
+	effect = {
+		custom_tooltip = lasombra_court_clear_shadow_adoption_cooldown_decision_effect_tt
+		lasombra_court_clear_shadow_adoption_cooldown_effect = yes
+		send_interface_toast = {
+			title = lasombra_court_clear_shadow_adoption_cooldown_toast_title
+			left_icon = root
+			custom_tooltip = lasombra_court_clear_shadow_adoption_cooldown_toast_desc
+		}
+	}
+
+	ai_potential = {
+		always = no
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}
+
+lasombra_court_spawn_umbral_council_test_courtiers_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_recruitment.dds"
+	}
+	decision_group_type = debug
+
+	ai_check_interval = 0
+
+	is_shown = {
+		debug_only = yes
+		lasombra_court_can_employ_umbral_council_trigger = yes
+		is_playable_character = yes
+	}
+
+	is_valid = {
+		is_adult = yes
+		is_imprisoned = no
+		exists = capital_province
+	}
+
+	is_valid_showing_failures_only = {
+		is_at_war = no
+	}
+
+	effect = {
+		custom_tooltip = lasombra_court_spawn_test_courtiers_decision_effect_tt
+		lasombra_court_init_umbral_council_positions_effect = yes
+		lasombra_court_spawn_umbral_council_test_courtiers_effect = yes
+		send_interface_toast = {
+			title = lasombra_court_spawn_test_courtiers_toast_title
+			left_icon = root
+			custom_tooltip = lasombra_court_spawn_test_courtiers_toast_desc
+		}
+	}
+
+	ai_potential = {
+		always = no
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}
+
+lasombra_court_umbral_orgy_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/lasombra_court_umbral_orgy_decision.dds"
+	}
+	decision_group_type = lasombra_court
+
+	cooldown = { years = 3 }
+	ai_check_interval = 0
+
+	is_shown = {
+		has_trait = lasombra
+		faith = faith:via_tenebrarum
+		is_playable_character = yes
+	}
+
+	is_valid = {
+		is_adult = yes
+		is_imprisoned = no
+		OR = {
+			any_courtier = {
+				count >= 1
+				is_adult = yes
+				NOT = { this = root }
+			}
+			any_pool_guest = {
+				lasombra_court_orgy_pool_guest_invite_candidate_trigger = yes
+			}
+			any_vassal_or_below = {
+				lasombra_court_orgy_subject_invite_candidate_trigger = yes
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_at_war = no
+	}
+
+	cost = {
+		piety = 75
+	}
+
+	effect = {
+		custom_tooltip = lasombra_court_umbral_orgy_decision_effect_tt
+		add_prestige = 25
+		if = {
+			limit = { has_character_flag = lasombra_court_chapel_prepared_for_orgy }
+			add_piety = 25
+			remove_character_flag = lasombra_court_chapel_prepared_for_orgy
+		}
+		lasombra_court_umbral_orgy_veil_synergy_effect = yes
+		hidden_effect = {
+			trigger_event = lasombra_court.0198
+		}
+	}
+
+	ai_potential = {
+		always = no
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}
+
+lasombra_court_umbral_lust_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/lasombra_court_umbral_lust_decision.dds"
+	}
+	decision_group_type = lasombra_court
+
+	cooldown = { years = 7 }
+	ai_check_interval = 0
+
+	is_shown = {
+		has_trait = lasombra
+		faith = faith:via_tenebrarum
+		is_playable_character = yes
+		POD_is_vampire_trigger = yes
+	}
+
+	is_valid = {
+		lasombra_court_umbral_lust_decision_valid_trigger = yes
+	}
+
+	is_valid_showing_failures_only = {
+		is_at_war = no
+		custom_description = {
+			text = lasombra_court_umbral_lust_need_blood_tt
+			POD_has_enough_blood_for_discipline = { AMOUNT = 2 }
+		}
+		custom_description = {
+			text = lasombra_court_umbral_lust_need_ghoul_cap_tt
+			num_of_relation_ghoul_thrall < max_ghoul_cap
+		}
+		custom_description = {
+			text = lasombra_court_umbral_lust_need_father_vessel_tt
+			lasombra_court_umbral_lust_has_father_vessel_trigger = yes
+		}
+		custom_description = {
+			text = lasombra_court_umbral_lust_need_mother_vessel_tt
+			lasombra_court_umbral_lust_has_mother_vessel_trigger = yes
+		}
+	}
+
+	cost = {
+		piety = 100
+	}
+
+	effect = {
+		custom_tooltip = lasombra_court_umbral_lust_decision_effect_tt
+		hidden_effect = {
+			trigger_event = lasombra_court.1300
+		}
+	}
+
+	ai_potential = {
+		always = no
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}

@@ -1,0 +1,6 @@
+on_raid_action_completion = {
+	events = {
+		lasombra_court.1600
+		lasombra_court.1601
+	}
+}

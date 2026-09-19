@@ -1,0 +1,77 @@
+Court of Shadows crash bisect — restoration plan (2026-07-13)
+
+CONFIRMED STABLE: v1.40.11 — 5+ min idle (all on_action + surface assets disabled)
+
+WHAT CAUSED CRASHES (evidence):
+  v1.40.8/9  ~47s idle   — full mod, council kill-switch
+  v1.40.10   ~2 min idle  — surface strip only (GUI/portraits/HUD off, scripts ON)
+  v1.40.11   5+ min idle  — surface + all on_action + POD portrait triggers OFF
+
+Conclusion: idle crash is primarily on_action background pulses (+ surface assets accelerate).
+
+STILL DISABLED (v1.40.10 surface strip):
+  gui/*, portrait_modifiers/*, data_binding, important_actions/*
+  council.gui backup in v1.40.9_window_council.gui.bak
+
+STILL DISABLED (v1.40.11 pulse strip):
+  council_pulse (weekly/monthly/quarterly sanitize + umbral council)
+  embrace_petition_pulse, embrace_petition_departure
+  salon_lifestyle_focus/xp pulses, cosla_lifestyle_pulse
+  yearly_pulse, raid, umbral_lust, umbral_council_refresh
+  POD_portrait/zz_lasombra_court_pod_portrait_triggers.txt
+
+v1.40.12 — PASSED 10+ min idle. RESTORED (one-shot / event-driven only):
+  game_start, ruler_designer, culture_on_actions, death_cleanup
+
+v1.40.13 — PASSED 15+ min idle. RESTORED:
+  POD_portrait/zz_lasombra_court_pod_portrait_triggers.txt
+
+v1.40.14 — PASSED 10+ min idle (with time advanced). RESTORED:
+  council_pulse (weekly/monthly/quarterly sanitize + umbral council init)
+
+v1.40.15 — PASSED (months advanced + idle, no crash). RESTORED:
+  salon_lifestyle_focus_on_actions, salon_lifestyle_xp_on_actions, cosla_lifestyle_pulse
+
+v1.40.16 — RESTORED:
+  embrace_petition_pulse, embrace_petition_departure
+
+v1.40.17 — PASSED idle (months + idle). embrace petition player-only (AI disabled).
+  Council tab CRASH — vanilla council GUI + Umbral seats; avoid F4 until council.gui restored.
+
+v1.40.18 — CRASHED (idle/year tick). Suspect: yearly_pulse (18% narrative roll per eligible ruler incl. AI).
+
+v1.40.19 — PASSED 10+ min idle. yearly_pulse DISABLED. KEPT: raid, council_refresh, culture merge.
+
+  Phase 2 surface (after scripts stable):
+  v1.40.20 — RESTORED portrait modifiers (salon_hair, umbral_portrait, activity_revel) — REVERTED v1.40.21
+  v1.40.21 — KISS portrait strip: POD trigger override kept; custom portrait modifiers disabled;
+             vanilla is_naked only in event chains (crossing, consort); activity/orgy map nudity deferred
+  v1.40.22 — right-click fix: shadow_adoption redirect guard, POD exists=this,
+             child_study_language override disabled (redirect scope bug)
+  v1.40.23 — interaction strip (all character_interactions off) + POD skin exists=this
+             + is_naked apply no-op. Bisect right-click / character UI crash.
+  v1.40.24 — important_actions (3 files)
+  v1.40.25 — data_bindings
+  v1.40.26 — GUI except council (lifestyle, RD, chargen faith, activity planner)
+  v1.40.27 — council.gui (with proper And() fix + IsValid guards, NOT kill-switch)
+
+v1.40.32 — embrace fetch 1430/1420 var guard; Chancellor shadow pact CK3 triggers (belligerent stance + joined_faction).
+v1.40.33 — Shadow Consort trait no longer auto-qualifies for embrace petitions (lover path requires actual lover/soulmate/best_friend relation).
+v1.40.34 — Question Embrace preview: show on adult courtiers at court; gray out with per-reason tooltips (relation, PoD embrace, ruler, war, trials).
+v1.40.35 — Umbral Orgy decision: per-reason confirm tooltips (piety, war, attendees, night-in-progress, etc.).
+v1.40.36 — Umbral Orgy stale lock: flag only on 0198 confirm; Abandon Stalled Orgy decision; one-time game_start sanitize.
+v1.40.37 — Umbral Orgy 0206 deadlock: guard unset spotlight vars; fix 0206.d trigger; add 0206.e skip option.
+
+v1.40.38 — CoSLA phase 1: RESTORED cos_grant_lifestyle_access interaction only (Lifestyle Prodigy grant).
+  Still parked: window_character_lifestyle.gui (phase 2 — perk UI for unlanded prodigies).
+  Test: right-click adult courtier → Grant Lifestyle Access; 5+ min idle; check error.log.
+
+v1.40.31 — umbral council F4 visibility fix:
+  Relaxed GUI script_values (no umbral_council_ready flag required to show section).
+  Legacy-save fallback for deferred_startup_done. Weekly catch-up init.
+
+v1.40.30 — embrace petition truly manual-only:
+  Removed auto 4-year dispatch from yearly_tick (player-only had still auto-fired 1400).
+  Restored Question Embrace interaction (right-click courtier).
+
+Pass criteria each test: 5+ min idle on map, no hard crash.

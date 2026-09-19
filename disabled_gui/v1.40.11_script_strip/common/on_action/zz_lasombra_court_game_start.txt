@@ -1,0 +1,35 @@
+# Defer all player/culture work off synchronous on_game_start — vanilla game_start
+# already processes cultures here and double-granting traditions/innovations errors.
+
+on_game_start = {
+	on_actions = { lasombra_court_on_game_start }
+}
+
+lasombra_court_on_game_start = {
+	effect = {
+		faith:via_tenebrarum = {
+			lasombra_court_via_tenebrarum_finalize_faith_effect = yes
+		}
+		# RD / finished-chargen: init immediately so council HUD can safely render on day 0.
+		# In-progress chargen: 0904 polls daily until predator type is set.
+		every_player = {
+			if = {
+				limit = { lasombra_court_player_past_pod_chargen_trigger = yes }
+				lasombra_court_try_deferred_player_init_effect = yes
+			}
+			else = {
+				trigger_event = { id = lasombra_court.0904 days = 1 }
+			}
+		}
+		every_ruler = {
+			limit = {
+				is_ai = yes
+				OR = {
+					culture = culture:lasombra_court
+					lasombra_court_can_employ_umbral_council_trigger = yes
+				}
+			}
+			trigger_event = { id = lasombra_court.0906 days = 10 }
+		}
+	}
+}

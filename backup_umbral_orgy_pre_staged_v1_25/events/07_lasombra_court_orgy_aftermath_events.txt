@@ -1,0 +1,149 @@
+namespace = lasombra_court
+
+# Vassal who refused Saturnalia summons holds a grudge.
+lasombra_court.0210 = {
+	type = character_event
+	title = lasombra_court.0210.t
+	desc = lasombra_court.0210.desc
+	theme = lasombra_coa
+	cooldown = { years = 3 }
+
+	trigger = {
+		any_vassal = {
+			has_character_flag = lasombra_court_orgy_grudge_pending
+			is_alive = yes
+		}
+	}
+
+	left_portrait = {
+		character = root
+		animation = anger
+	}
+
+	right_portrait = {
+		character = scope:orgy_decliner
+		animation = disapproval
+	}
+
+	immediate = {
+		random_vassal = {
+			limit = {
+				has_character_flag = lasombra_court_orgy_grudge_pending
+				is_alive = yes
+			}
+			save_scope_as = orgy_decliner
+			remove_character_flag = lasombra_court_orgy_grudge_pending
+		}
+	}
+
+	option = {
+		name = lasombra_court.0210.a
+		add_dread = 10
+		scope:orgy_decliner = {
+			add_opinion = {
+				target = root
+				modifier = lasombra_court_orgy_refusal_grudge_opinion
+			}
+		}
+	}
+
+	option = {
+		name = lasombra_court.0210.b
+		scope:orgy_decliner = {
+			add_opinion = {
+				target = root
+				modifier = grateful_opinion
+				opinion = 15
+			}
+		}
+		remove_short_term_gold = minor_gold_value
+	}
+
+	option = {
+		name = lasombra_court.0210.c
+		add_prestige = 50
+	}
+}
+
+# Quiet Saturnalia — was the rite worth the piety?
+lasombra_court.0211 = {
+	type = character_event
+	title = lasombra_court.0211.t
+	desc = lasombra_court.0211.desc
+	theme = lasombra_coa
+	cooldown = { years = 3 }
+
+	override_background = {
+		reference = lasombra_court_umbral_orgy
+	}
+
+	left_portrait = {
+		character = root
+		animation = boredom
+	}
+
+	option = {
+		name = lasombra_court.0211.a
+		add_piety = 50
+		stress_impact = {
+			zealous = minor_stress_impact_loss
+		}
+	}
+
+	option = {
+		name = lasombra_court.0211.b
+		add_prestige = 25
+	}
+}
+
+# Spouse outraged by Saturnalia.
+lasombra_court.0212 = {
+	type = character_event
+	title = lasombra_court.0212.t
+	desc = lasombra_court.0212.desc
+	theme = lasombra_coa
+	cooldown = { years = 3 }
+
+	left_portrait = {
+		character = root
+		animation = worry
+	}
+
+	right_portrait = {
+		character = primary_spouse
+		animation = anger
+	}
+
+	option = {
+		name = lasombra_court.0212.a
+		primary_spouse = {
+			add_opinion = {
+				target = root
+				modifier = lasombra_court_spouse_outraged_opinion
+			}
+		}
+	}
+
+	option = {
+		name = lasombra_court.0212.b
+		add_piety = 50
+		primary_spouse = {
+			add_opinion = {
+				target = root
+				modifier = grateful_opinion
+				opinion = 10
+			}
+		}
+	}
+
+	option = {
+		name = lasombra_court.0212.c
+		add_dread = 12
+		primary_spouse = {
+			add_opinion = {
+				target = root
+				modifier = lasombra_court_spouse_outraged_opinion
+			}
+		}
+	}
+}

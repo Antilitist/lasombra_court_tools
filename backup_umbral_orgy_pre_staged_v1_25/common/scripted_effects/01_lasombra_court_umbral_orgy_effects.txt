@@ -1,0 +1,618 @@
+# Fill one portrait slot: women first, then men. Reusable for orgy-style scenes.
+lasombra_court_umbral_orgy_pick_portrait_slot_effect = {
+	if = {
+		limit = {
+			any_in_list = {
+				variable = orgy_attendees
+				lasombra_court_orgy_portrait_female_candidate_trigger = yes
+			}
+		}
+		random_in_list = {
+			variable = orgy_attendees
+			limit = {
+				lasombra_court_orgy_portrait_female_candidate_trigger = yes
+			}
+			save_scope_as = $ATTENDEE_SCOPE$
+		}
+	}
+	else_if = {
+		limit = {
+			any_in_list = {
+				variable = orgy_attendees
+				lasombra_court_orgy_portrait_male_candidate_trigger = yes
+			}
+		}
+		random_in_list = {
+			variable = orgy_attendees
+			limit = {
+				lasombra_court_orgy_portrait_male_candidate_trigger = yes
+			}
+			save_scope_as = $ATTENDEE_SCOPE$
+		}
+	}
+}
+
+# Root always has left_portrait; fill five slots — women first, then men.
+lasombra_court_umbral_orgy_gather_attendees_effect = {
+	lasombra_court_umbral_orgy_pick_portrait_slot_effect = { ATTENDEE_SCOPE = orgy_attendee_1 }
+	lasombra_court_umbral_orgy_pick_portrait_slot_effect = { ATTENDEE_SCOPE = orgy_attendee_2 }
+	lasombra_court_umbral_orgy_pick_portrait_slot_effect = { ATTENDEE_SCOPE = orgy_attendee_3 }
+	lasombra_court_umbral_orgy_pick_portrait_slot_effect = { ATTENDEE_SCOPE = orgy_attendee_4 }
+	lasombra_court_umbral_orgy_pick_portrait_slot_effect = { ATTENDEE_SCOPE = orgy_attendee_5 }
+	lasombra_court_umbral_orgy_record_portraits_effect = yes
+}
+
+# Mutual +10 opinion after courtiers couple at the rite.
+lasombra_court_umbral_orgy_add_sex_opinion_effect = {
+	scope:orgy_seeker = {
+		add_opinion = {
+			target = scope:orgy_partner
+			modifier = lasombra_court_had_sex_at_orgy_opinion
+		}
+	}
+	scope:orgy_partner = {
+		add_opinion = {
+			target = scope:orgy_seeker
+			modifier = lasombra_court_had_sex_at_orgy_opinion
+		}
+	}
+}
+
+# Pair two courtiers for the rite; pregnancy when an opposite-sex fertile pair couples.
+lasombra_court_umbral_orgy_pair_courtiers_effect = {
+	scope:orgy_seeker = {
+		add_character_flag = orgy_paired
+	}
+	scope:orgy_partner = {
+		add_character_flag = orgy_paired
+	}
+
+	if = {
+		limit = {
+			lasombra_court_orgy_conception_pair_trigger = yes
+		}
+		if = {
+			limit = {
+				scope:orgy_seeker = { lasombra_court_orgy_fertile_female_candidate_trigger = yes }
+			}
+			scope:orgy_seeker = {
+				had_sex_with_effect = {
+					CHARACTER = scope:orgy_partner
+					PREGNANCY_CHANCE = 100
+				}
+			}
+		}
+		else = {
+			scope:orgy_partner = {
+				had_sex_with_effect = {
+					CHARACTER = scope:orgy_seeker
+					PREGNANCY_CHANCE = 100
+				}
+			}
+		}
+		scope:orgy_seeker = { add_character_flag = orgy_ledger_laid }
+		scope:orgy_partner = { add_character_flag = orgy_ledger_laid }
+		lasombra_court_umbral_orgy_log_summary_effect = {
+			LIST = orgy_summary_laid
+			TARGET = scope:orgy_seeker
+		}
+		lasombra_court_umbral_orgy_log_summary_effect = {
+			LIST = orgy_summary_laid
+			TARGET = scope:orgy_partner
+		}
+	}
+	else = {
+		scope:orgy_seeker = {
+			had_sex_with_effect = {
+				CHARACTER = scope:orgy_partner
+				PREGNANCY_CHANCE = 0
+			}
+		}
+		scope:orgy_seeker = { add_character_flag = orgy_ledger_revelry }
+		scope:orgy_partner = { add_character_flag = orgy_ledger_revelry }
+		lasombra_court_umbral_orgy_log_summary_effect = {
+			LIST = orgy_summary_revelry
+			TARGET = scope:orgy_seeker
+		}
+		lasombra_court_umbral_orgy_log_summary_effect = {
+			LIST = orgy_summary_revelry
+			TARGET = scope:orgy_partner
+		}
+	}
+
+	lasombra_court_umbral_orgy_add_sex_opinion_effect = yes
+}
+
+# One pairing pass — opinion-weighted partners, mutual attraction gate.
+lasombra_court_umbral_orgy_attempt_pairing_effect = {
+	every_in_list = {
+		variable = orgy_attendees
+		limit = {
+			lasombra_court_orgy_attendee_trigger = yes
+			NOT = { has_character_flag = orgy_paired }
+		}
+		save_scope_as = orgy_seeker
+
+		if = {
+			limit = {
+				any_in_list = {
+					variable = orgy_attendees
+					lasombra_court_orgy_partner_candidate_trigger = yes
+					NOT = { this = scope:orgy_seeker }
+				}
+			}
+			random = {
+				chance = $CHANCE$
+				modifier = {
+					add = 10
+					root.faith = { has_doctrine = tenet_lasombra_saturnalia_tenebris }
+				}
+				modifier = {
+					add = 10
+					root = { employs_court_position = lasombra_court_saturnalia_master_court_position }
+				}
+				modifier = {
+					add = 5
+					root = { employs_court_position = lasombra_court_shadow_harem_keeper_court_position }
+				}
+				modifier = {
+					add = 12
+					root = { dynasty ?= { has_dynasty_perk = penumbra_legacy_3 } }
+				}
+				modifier = {
+					add = 8
+					root = {
+						lasombra_court_penumbra_synergy_trigger = yes
+						dynasty ?= { has_dynasty_perk = penumbra_legacy_3 }
+					}
+				}
+				modifier = {
+					add = 5
+					root = { dynasty ?= { has_dynasty_perk = penumbra_legacy_5 } }
+				}
+				random_in_list = {
+					variable = orgy_attendees
+					limit = {
+						lasombra_court_orgy_partner_candidate_trigger = yes
+						NOT = { this = scope:orgy_seeker }
+					}
+					weight = {
+						base = 1
+						modifier = {
+							add = 40
+							lasombra_court_orgy_conception_match_trigger = yes
+						}
+						opinion_modifier = {
+							who = this
+							opinion_target = scope:orgy_seeker
+							multiplier = 0.1
+						}
+					}
+					save_scope_as = orgy_partner
+				}
+				lasombra_court_umbral_orgy_pair_courtiers_effect = yes
+			}
+		}
+	}
+}
+
+# Consecrated fertile match — skips attraction so the rite can sow new courtiers.
+lasombra_court_umbral_orgy_attempt_fertile_pairing_effect = {
+	if = {
+		limit = {
+			any_in_list = {
+				variable = orgy_attendees
+				lasombra_court_orgy_fertile_female_candidate_trigger = yes
+				NOT = { has_character_flag = orgy_paired }
+			}
+			any_in_list = {
+				variable = orgy_attendees
+				lasombra_court_orgy_fertile_male_candidate_trigger = yes
+				NOT = { has_character_flag = orgy_paired }
+			}
+		}
+		random_in_list = {
+			variable = orgy_attendees
+			limit = {
+				lasombra_court_orgy_fertile_female_candidate_trigger = yes
+				NOT = { has_character_flag = orgy_paired }
+			}
+			save_scope_as = orgy_seeker
+		}
+		random_in_list = {
+			variable = orgy_attendees
+			limit = {
+				lasombra_court_orgy_fertile_male_candidate_trigger = yes
+				NOT = { has_character_flag = orgy_paired }
+				NOT = { this = scope:orgy_seeker }
+			}
+			save_scope_as = orgy_partner
+		}
+		lasombra_court_umbral_orgy_pair_courtiers_effect = yes
+	}
+}
+
+# Mark who was not pregnant when the rite began (for fallback conception).
+lasombra_court_umbral_orgy_mark_pre_pregnancy_effect = {
+	every_in_list = {
+		variable = orgy_attendees
+		limit = {
+			lasombra_court_orgy_attendee_trigger = yes
+			is_pregnant = no
+		}
+		add_character_flag = orgy_was_not_pregnant
+	}
+}
+
+# If revelry produced no new life, consecrate one more fertile coupling.
+lasombra_court_umbral_orgy_ensure_conception_effect = {
+	if = {
+		limit = {
+			NOT = {
+				any_in_list = {
+					variable = orgy_attendees
+					has_character_flag = orgy_was_not_pregnant
+					is_pregnant = yes
+				}
+			}
+			any_in_list = {
+				variable = orgy_attendees
+				lasombra_court_orgy_fertile_female_candidate_trigger = yes
+			}
+			any_in_list = {
+				variable = orgy_attendees
+				lasombra_court_orgy_fertile_male_candidate_trigger = yes
+			}
+		}
+		random_in_list = {
+			variable = orgy_attendees
+			limit = {
+				lasombra_court_orgy_fertile_female_candidate_trigger = yes
+			}
+			save_scope_as = orgy_seeker
+			remove_character_flag = orgy_paired
+		}
+		random_in_list = {
+			variable = orgy_attendees
+			limit = {
+				lasombra_court_orgy_fertile_male_candidate_trigger = yes
+				NOT = { this = scope:orgy_seeker }
+			}
+			save_scope_as = orgy_partner
+			remove_character_flag = orgy_paired
+		}
+		lasombra_court_umbral_orgy_pair_courtiers_effect = yes
+	}
+}
+
+# Host and revelers who coupled or reveled shed a little stress at a consecrated orgy.
+lasombra_court_umbral_orgy_relieve_participant_stress_effect = {
+	root = {
+		if = {
+			limit = {
+				OR = {
+					has_trait = lustful
+					has_trait = zealous
+					has_trait = rakish
+					has_trait = deviant
+					has_trait = gregarious
+					has_trait = lifestyle_reveler
+				}
+			}
+			add_stress = minor_stress_loss
+		}
+	}
+	every_in_list = {
+		variable = orgy_attendees
+		limit = {
+			OR = {
+				has_character_flag = orgy_ledger_laid
+				has_character_flag = orgy_ledger_revelry
+			}
+			OR = {
+				has_trait = lustful
+				has_trait = zealous
+				has_trait = rakish
+				has_trait = deviant
+				has_trait = gregarious
+				has_trait = lifestyle_reveler
+			}
+		}
+		add_stress = minor_stress_loss
+	}
+}
+
+# One intimate partner attempts pairing — shared by consort and lover passes.
+lasombra_court_umbral_orgy_attempt_intimate_partner_pairing_effect = {
+	save_scope_as = orgy_seeker
+
+	if = {
+		limit = {
+			NOT = { has_character_flag = orgy_paired }
+			lasombra_court_orgy_host_conception_pair_trigger = yes
+		}
+		random = {
+			chance = 90
+			root = { save_scope_as = orgy_partner }
+			lasombra_court_umbral_orgy_pair_courtiers_effect = yes
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_character_flag = orgy_paired }
+			any_in_list = {
+				variable = orgy_attendees
+				lasombra_court_orgy_partner_candidate_trigger = yes
+				NOT = { this = scope:orgy_seeker }
+				lasombra_court_orgy_conception_match_trigger = yes
+			}
+		}
+		random = {
+			chance = 85
+			random_in_list = {
+				variable = orgy_attendees
+				limit = {
+					lasombra_court_orgy_partner_candidate_trigger = yes
+					NOT = { this = scope:orgy_seeker }
+					lasombra_court_orgy_conception_match_trigger = yes
+				}
+				save_scope_as = orgy_partner
+			}
+			lasombra_court_umbral_orgy_pair_courtiers_effect = yes
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_character_flag = orgy_paired }
+			any_in_list = {
+				variable = orgy_attendees
+				lasombra_court_orgy_partner_candidate_trigger = yes
+				NOT = { this = scope:orgy_seeker }
+			}
+		}
+		random = {
+			chance = 75
+			random_in_list = {
+				variable = orgy_attendees
+				limit = {
+					lasombra_court_orgy_partner_candidate_trigger = yes
+					NOT = { this = scope:orgy_seeker }
+				}
+				save_scope_as = orgy_partner
+			}
+			lasombra_court_umbral_orgy_pair_courtiers_effect = yes
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_character_flag = orgy_paired }
+			lasombra_court_orgy_host_revelry_pair_trigger = yes
+		}
+		random = {
+			chance = 70
+			root = { save_scope_as = orgy_partner }
+			lasombra_court_umbral_orgy_pair_courtiers_effect = yes
+		}
+	}
+}
+
+# Spouses, concubines, and lovers pair first — fertility with the host, then other revelers.
+lasombra_court_umbral_orgy_attempt_intimate_pairing_effect = {
+	every_consort = {
+		limit = {
+			lasombra_court_orgy_consort_candidate_trigger = yes
+			NOT = { has_character_flag = orgy_paired }
+		}
+		lasombra_court_umbral_orgy_attempt_intimate_partner_pairing_effect = yes
+	}
+	every_relation = {
+		type = lover
+		limit = {
+			lasombra_court_orgy_lover_candidate_trigger = yes
+			NOT = { has_character_flag = orgy_paired }
+			root = {
+				is_target_in_variable_list = {
+					name = orgy_attendees
+					target = prev
+				}
+			}
+		}
+		lasombra_court_umbral_orgy_attempt_intimate_partner_pairing_effect = yes
+	}
+}
+
+# Processes each eligible adult courtier during the Umbral Orgy rite.
+lasombra_court_umbral_orgy_process_courtiers_effect = {
+	lasombra_court_umbral_orgy_mark_pre_pregnancy_effect = yes
+
+	# Consorts and lovers join the rite and try to conceive when fertile.
+	lasombra_court_umbral_orgy_attempt_intimate_pairing_effect = yes
+
+	# Courtiers pair with each other — the rite is meant to fill the court with new life.
+	lasombra_court_umbral_orgy_attempt_pairing_effect = { CHANCE = 95 }
+	lasombra_court_umbral_orgy_attempt_pairing_effect = { CHANCE = 75 }
+	lasombra_court_umbral_orgy_attempt_pairing_effect = { CHANCE = 50 }
+	lasombra_court_umbral_orgy_attempt_fertile_pairing_effect = yes
+	lasombra_court_umbral_orgy_ensure_conception_effect = yes
+
+	# The prince may join another reveler for pleasure — intimates are handled above.
+	if = {
+		limit = {
+			any_in_list = {
+				variable = orgy_attendees
+				lasombra_court_orgy_attendee_trigger = yes
+				POD_can_have_sex_basic_trigger = yes
+				NOT = { lasombra_court_orgy_intimate_partner_candidate_trigger = yes }
+				NOT = { has_character_flag = orgy_paired }
+			}
+		}
+		random = {
+			chance = 40
+			random_in_list = {
+				variable = orgy_attendees
+				limit = {
+					lasombra_court_orgy_attendee_trigger = yes
+					POD_can_have_sex_basic_trigger = yes
+					NOT = { lasombra_court_orgy_intimate_partner_candidate_trigger = yes }
+					NOT = { has_character_flag = orgy_paired }
+				}
+				save_scope_as = orgy_ruler_partner
+			}
+			had_sex_with_effect = {
+				CHARACTER = scope:orgy_ruler_partner
+				PREGNANCY_CHANCE = 0
+			}
+			scope:orgy_ruler_partner = { add_character_flag = orgy_ledger_revelry }
+			lasombra_court_umbral_orgy_log_summary_effect = {
+				LIST = orgy_summary_revelry
+				TARGET = scope:orgy_ruler_partner
+			}
+		}
+	}
+
+	lasombra_court_umbral_orgy_relieve_participant_stress_effect = yes
+
+	# Log everyone present, then apply conversion / herd / ghoul rolls.
+	every_in_list = {
+		variable = orgy_attendees
+		limit = {
+			lasombra_court_orgy_attendee_trigger = yes
+		}
+		save_scope_as = orgy_participant
+		lasombra_court_umbral_orgy_log_summary_effect = {
+			LIST = orgy_summary_present
+			TARGET = scope:orgy_participant
+		}
+
+		# Strong chance to convert non-Tenebrarum courtiers.
+		if = {
+			limit = {
+				NOT = { faith = faith:via_tenebrarum }
+				POD_has_true_faith_trigger = no
+			}
+			random = {
+				chance = 70
+				modifier = {
+					add = 15
+					root = { has_trait = lasombra_court_ash_liturgist }
+				}
+				modifier = {
+					add = 10
+					root = { employs_court_position = lasombra_court_saturnalia_master_court_position }
+				}
+				modifier = {
+					add = 10
+					root = { employs_court_position = lasombra_court_blood_confessor_court_position }
+				}
+				modifier = {
+					add = 18
+					root = { dynasty ?= { has_dynasty_perk = penumbra_legacy_2 } }
+				}
+				modifier = {
+					add = 12
+					root = {
+						lasombra_court_penumbra_synergy_trigger = yes
+						dynasty ?= { has_dynasty_perk = penumbra_legacy_2 }
+					}
+				}
+				set_character_faith = faith:via_tenebrarum
+				scope:orgy_participant = { add_character_flag = orgy_ledger_converted }
+				lasombra_court_umbral_orgy_log_summary_effect = {
+					LIST = orgy_summary_converted
+					TARGET = scope:orgy_participant
+				}
+			}
+		}
+
+		# Chance to bind revelers to the prince's herd.
+		if = {
+			limit = {
+				lasombra_court_orgy_herd_candidate_trigger = yes
+				root = { num_of_relation_herd_member < max_herd_cap }
+			}
+			random = {
+				chance = 50
+				modifier = {
+					add = 15
+					root = { employs_court_position = lasombra_court_herd_binder_court_position }
+				}
+				modifier = {
+					add = 12
+					root = { dynasty ?= { has_dynasty_perk = penumbra_legacy_3 } }
+				}
+				modifier = {
+					add = 8
+					root = {
+						lasombra_court_penumbra_synergy_trigger = yes
+						dynasty ?= { has_dynasty_perk = penumbra_legacy_3 }
+					}
+				}
+				root = {
+					POD_herdify_effect = { TARGET = scope:orgy_participant }
+				}
+				scope:orgy_participant = { add_character_flag = orgy_ledger_herd }
+				lasombra_court_umbral_orgy_log_summary_effect = {
+					LIST = orgy_summary_herd
+					TARGET = scope:orgy_participant
+				}
+			}
+		}
+
+		# Chance to ghoulify still-mortal revelers.
+		if = {
+			limit = {
+				lasombra_court_orgy_ghoul_candidate_trigger = yes
+				root = {
+					POD_is_vampire_trigger = yes
+					blood_potency_value > 0
+					num_of_relation_ghoul_thrall < max_ghoul_cap
+					POD_has_enough_blood_for_discipline = { AMOUNT = 1 }
+				}
+			}
+			random = {
+				chance = 40
+				modifier = {
+					add = 10
+					root = { employs_court_position = lasombra_court_thrall_master_court_position }
+				}
+				modifier = {
+					add = 15
+					root = { dynasty ?= { has_dynasty_perk = penumbra_legacy_4 } }
+				}
+				modifier = {
+					add = 10
+					root = {
+						lasombra_court_penumbra_synergy_trigger = yes
+						dynasty ?= { has_dynasty_perk = penumbra_legacy_4 }
+					}
+				}
+				scope:orgy_participant = {
+					POD_become_ghoul_effect = yes
+					POD_become_bound_ghoul_effect = { DOMITOR = root }
+				}
+				root = {
+					POD_hunger_rouse_check_effect = yes
+					hidden_effect = {
+						POD_small_risk_of_increasing_masquerade_exposure = yes
+					}
+				}
+				scope:orgy_participant = { add_character_flag = orgy_ledger_ghoul }
+				lasombra_court_umbral_orgy_log_summary_effect = {
+					LIST = orgy_summary_ghoul
+					TARGET = scope:orgy_participant
+				}
+			}
+		}
+	}
+
+}
+
+# Capital county remembers the debauch for five years.
+lasombra_court_umbral_orgy_apply_capital_modifier_effect = {
+	capital_county = {
+		add_county_modifier = {
+			modifier = lasombra_court_recent_saturnalia_modifier
+			years = lasombra_court_penumbra_saturnalia_years_value
+		}
+	}
+}

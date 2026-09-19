@@ -1,0 +1,129 @@
+# Court of Shadows — Ruler Designer faith tooltips (v1.11.13)
+# All faiths except Via Tenebrarum use vanilla tenet row (container_tenet_item).
+# Only Via Tenebrarum (tenet_lasombra_court_of_blood) gets the scrollable 5-column grid.
+
+template lasombra_court_faith_tooltip_tenet_scroll_height
+{
+	max_height = 220
+}
+
+template lasombra_court_faith_tooltip_core_tenents_scrollable
+{
+	divider_light = {
+		layoutpolicy_horizontal = expanding
+	}
+
+	text_label_center = {
+		text = "FAITH_CORE_TENETS_HEADING"
+		fonttintcolor = "[TooltipInfo.GetTintColor]"
+	}
+
+	# Standard faiths — vanilla single-row banner layout (3–5 tenets).
+	widget = {
+		visible = "[Not( Faith.HasDoctrineByKey( 'tenet_lasombra_court_of_blood' ) )]"
+		layoutpolicy_horizontal = expanding
+
+		hbox = {
+			name = "doctrines"
+			datamodel = "[Faith.GetDoctrines]"
+			spacing = 10
+
+			item = {
+				name = "doctrine_item"
+
+				container_tenet_item = {
+					visible = "[EqualTo_string( FaithDoctrine.GetGroup.GetCategory, 'core_tenets' )]"
+					tooltip = "FAITH_WINDOW_DOCTRINE_TOOLTIP_WITH_FAITH"
+				}
+			}
+		}
+	}
+
+	# Via Tenebrarum — scrollable 5-column grid, core tenets only.
+	widget = {
+		visible = "[Faith.HasDoctrineByKey( 'tenet_lasombra_court_of_blood' )]"
+		layoutpolicy_horizontal = expanding
+		size = { 400 220 }
+
+		scrollbox = {
+			layoutpolicy_horizontal = expanding
+			size = { 400 220 }
+			resizeparent = yes
+
+			blockoverride "scrollbox_background" {}
+			blockoverride "scrollbox_background_fade" {}
+
+			blockoverride "scrollbox_content"
+			{
+				margin = { 4 4 }
+
+				dynamicgridbox = {
+					name = "lasombra_court_core_tenets_grid"
+					datamodel = "[Faith.GetDoctrines]"
+					datamodel_wrap = 5
+					flipdirection = yes
+					spacing = 6
+					ignoreinvisible = yes
+
+					item = {
+						lasombra_court_tenet_tooltip_item = {
+							visible = "[EqualTo_string( FaithDoctrine.GetGroup.GetCategory, 'core_tenets' )]"
+							tooltip = "FAITH_WINDOW_DOCTRINE_TOOLTIP_WITH_FAITH"
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+types LasombraCourtFaithTooltips
+{
+	# Scaled portrait banner (130:200), not square — fits 5 columns in a 400px tooltip.
+	type lasombra_court_tenet_tooltip_item = container
+	{
+		size = { 74 148 }
+		using = tooltip_se
+
+		highlight_icon = {
+			name = "doctrine_group_bg"
+			texture = "[Faith.GetDoctrineBackgroundIcon]"
+			size = { 74 114 }
+		}
+
+		highlight_icon = {
+			name = "doctrine_group_icon"
+			texture = "[FaithDoctrine.GetIcon]"
+			size = { 74 114 }
+			alpha = 0.85
+		}
+
+		text_label_center = {
+			name = "doctrine_name"
+			parentanchor = bottom|hcenter
+			widgetanchor = center
+			position = { 0 -2 }
+			maximumsize = { 74 30 }
+			fontsize_min = 10
+			multiline = yes
+			align = center
+			elide = right
+			text = "[FaithDoctrine.GetNameNoTooltip( Faith.Self )]"
+			default_format = "#high"
+		}
+	}
+
+	type lasombra_court_faith_tooltip_ruler_designer = faith_tooltip
+	{
+		blockoverride "extra_info"
+		{
+			using = lasombra_court_faith_tooltip_core_tenents_scrollable
+			using = faith_tooltip_ruler_designer_extra_info
+		}
+	}
+
+	type lasombra_court_faith_tooltip_selection = faith_tooltip
+	{
+		blockoverride "extra_info" {}
+	}
+}

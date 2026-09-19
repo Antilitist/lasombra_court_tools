@@ -1,0 +1,3 @@
+# Child of Umbral Lust — birth is handled only by lasombra_court.1305 (42-night timer).
+# Do NOT hook on_birth_child: firing a same-day event mid-chain corrupts scope:mother
+# and cascades into vanilla child_birth_on_actions province-scope errors + hard crashes.

@@ -1,0 +1,34 @@
+# Court of Shadows — clear embrace/crossing vars when referenced characters die.
+
+on_death = {
+	on_actions = { lasombra_court_embrace_petition_on_death }
+}
+
+lasombra_court_embrace_petition_on_death = {
+	effect = {
+		save_scope_as = lasombra_court_dead_character
+		every_player = {
+			limit = {
+				OR = {
+					AND = {
+						exists = var:lasombra_court_embrace_petitioner
+						var:lasombra_court_embrace_petitioner = scope:lasombra_court_dead_character
+					}
+					AND = {
+						exists = var:lasombra_court_embrace_quest_target
+						var:lasombra_court_embrace_quest_target = scope:lasombra_court_dead_character
+					}
+					AND = {
+						exists = var:lasombra_court_crossing_childe
+						var:lasombra_court_crossing_childe = scope:lasombra_court_dead_character
+					}
+					AND = {
+						exists = var:lasombra_court_crossing_fetch_target
+						var:lasombra_court_crossing_fetch_target = scope:lasombra_court_dead_character
+					}
+				}
+			}
+			lasombra_court_sanitize_stale_character_vars_effect = yes
+		}
+	}
+}

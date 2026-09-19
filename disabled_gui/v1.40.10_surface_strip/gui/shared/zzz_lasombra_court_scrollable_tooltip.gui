@@ -1,0 +1,61 @@
+# Court of Shadows — scrollable default tooltip (v1.13.3)
+# Long event-option effect lists (e.g. Umbral Orgy tally) exceed screen height without scrolling.
+
+template LasombraCourt_ScrollableTooltipHeight
+{
+	max_height = 420
+}
+
+template DefaultTooltipWidget {
+	container = {
+		using = GeneralTooltipSetup
+		alwaystransparent = no
+
+		widget = {
+			name = "background"
+			using = DefaultTooltipBackground
+			size = { 100% 100% }
+			alwaystransparent = no
+		}
+
+		vbox = {
+			layoutpolicy_horizontal = expanding
+
+			scrollbox = {
+				max_width = 450
+				using = LasombraCourt_ScrollableTooltipHeight
+				resizeparent = yes
+				autoresizescrollarea = yes
+				layoutpolicy_horizontal = expanding
+
+				blockoverride "scrollbox_background" {}
+				blockoverride "scrollbox_background_fade" {}
+
+				blockoverride "scrollbox_content" {
+					textbox = {
+						name = "TooltipText"
+						using = DefaultTooltipText
+						layoutpolicy_horizontal = expanding
+						margin = { 17 12 }
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+						alwaystransparent = no
+					}
+				}
+			}
+
+			textbox = {
+				name = "TooltipTextShortcut"
+				using = DefaultTooltipText
+				layoutpolicy_horizontal = expanding
+				margin = { 15 10 }
+				fonttintcolor = "[TooltipInfo.GetTintColor]"
+			}
+		}
+	}
+}
+
+container = {
+	alwaystransparent = no
+	name = "DefaultTooltipWidget"
+	using = DefaultTooltipWidget
+}

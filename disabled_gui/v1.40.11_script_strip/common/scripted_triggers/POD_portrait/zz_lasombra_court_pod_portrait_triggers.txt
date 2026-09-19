@@ -1,0 +1,84 @@
+# Via Tenebrarum / Umbral court — never apply PoD's Blood Gnostic nun habit.
+# Loaded in POD_portrait/ so this file sorts after PoD's portrait trigger definitions.
+
+lasombra_court_umbral_no_nun_portrait_trigger = {
+	is_female = yes
+	OR = {
+		faith = faith:via_tenebrarum
+		culture = culture:lasombra_court
+		has_character_flag = lasombra_court_umbral_portrait
+	}
+}
+
+POD_portrait_nun_habit_trigger = {
+	is_female = yes
+	NOR = {
+		faith = faith:via_tenebrarum
+		culture = culture:lasombra_court
+		has_character_flag = lasombra_court_umbral_portrait
+	}
+	OR = {
+		POD_is_vittoria_trigger = yes
+		POS_is_anezka_trigger = yes
+		faith = faith:shadowinquisition
+		dynasty = dynasty:13000008 # Society of St. George
+		dynasty = dynasty:13000011 # Order of St. Joan
+		dynasty = dynasty:13000001 # Red Order
+		faith = faith:viacain
+		AND = {
+			religion = religion:bloodgnosticism_religion
+			NOR = {
+				faith = faith:via_tenebrarum
+				culture = culture:lasombra_court
+			}
+		}
+		has_title = title:k_shadowinquisition
+	}
+}
+
+portrait_monk_robe_trigger = {
+	NOR = {
+		faith = faith:via_tenebrarum
+		culture = culture:lasombra_court
+		has_character_flag = lasombra_court_umbral_portrait
+	}
+	OR = {
+		AND = {
+			OR = {
+				faith = faith:calomenasforsaken
+				dynasty = dynasty:13000001
+				dynasty = dynasty:13000003
+				dynasty = dynasty:13000007
+				dynasty = dynasty:13000011
+				POD_is_leopold_trigger = yes
+				POD_is_absalon_trigger = yes
+				has_character_flag = POD_monk_robe_flag
+				AND = {
+					faith = faith:viacain
+					is_ruler = no
+				}
+				AND = {
+					is_ruler = no
+					is_predatortype_cenobite_trigger = yes
+				}
+				faith = faith:viacaeli
+				faith = faith:viapenaculum
+				AND = {
+					faith = faith:viadolorosa
+				}
+				faith = faith:viachristi
+				faith = faith:viaarchangeli
+				faith = faith:vianoctis
+				has_title = title:k_shadowinquisition
+				POD_portrait_nun_habit_trigger = yes
+			}
+			OR = {
+				portrait_byzantine_clothing_trigger = yes
+				portrait_northern_clothing_trigger = yes
+				portrait_western_clothing_trigger = yes
+			}
+		}
+		POD_is_cappadocius_trigger = yes
+		POD_is_japhet_trigger = yes
+	}
+}

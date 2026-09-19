@@ -1,0 +1,40 @@
+# CoSLA — monthly lifestyle XP for designated unlanded characters (v1.33.0)
+# Appends to random_yearly_everyone_pulse; twelve delayed ticks approximate monthly gain.
+
+random_yearly_everyone_pulse = {
+	on_actions = { cosla_yearly_lifestyle_access_pulse }
+}
+
+cosla_yearly_lifestyle_access_pulse = {
+	trigger = { cosla_needs_manual_lifestyle_xp_trigger = yes }
+	on_actions = {
+		cosla_monthly_lifestyle_xp_pulse
+		delay = { days = 28 }
+		cosla_monthly_lifestyle_xp_pulse
+		delay = { days = 28 }
+		cosla_monthly_lifestyle_xp_pulse
+		delay = { days = 28 }
+		cosla_monthly_lifestyle_xp_pulse
+		delay = { days = 28 }
+		cosla_monthly_lifestyle_xp_pulse
+		delay = { days = 28 }
+		cosla_monthly_lifestyle_xp_pulse
+		delay = { days = 28 }
+		cosla_monthly_lifestyle_xp_pulse
+		delay = { days = 28 }
+		cosla_monthly_lifestyle_xp_pulse
+		delay = { days = 28 }
+		cosla_monthly_lifestyle_xp_pulse
+		delay = { days = 28 }
+		cosla_monthly_lifestyle_xp_pulse
+		delay = { days = 28 }
+		cosla_monthly_lifestyle_xp_pulse
+		delay = { days = 28 }
+		cosla_monthly_lifestyle_xp_pulse
+	}
+}
+
+cosla_monthly_lifestyle_xp_pulse = {
+	trigger = { cosla_needs_manual_lifestyle_xp_trigger = yes }
+	effect = { cosla_monthly_lifestyle_xp_effect = yes }
+}

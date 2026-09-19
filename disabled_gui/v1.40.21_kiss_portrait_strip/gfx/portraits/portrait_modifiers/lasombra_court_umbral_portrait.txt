@@ -1,0 +1,71 @@
+# Strip PoD nun habit / devoted robes for Via Tenebrarum and Umbral culture (weight > POD_nun_habit 9000).
+lasombra_court_umbral_portrait = {
+	usage = game
+	selection_behavior = max
+	priority = 25
+
+	umbral_strip_nun_headgear = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = headgear
+				template = no_headgear
+				value = 1.0
+			}
+			accessory = {
+				mode = add
+				gene = additive_headgear
+				template = no_additive
+				value = 1.0
+			}
+			accessory = {
+				mode = add
+				gene = secondary_headgears
+				template = no_headgear
+				value = 1
+			}
+			accessory = {
+				mode = add
+				gene = hairstyles
+				template = western_hairstyles_straight
+				range = { 0 1 }
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 9500
+				lasombra_court_umbral_no_nun_portrait_trigger = yes
+				scope:age >= 18
+				POD_werewolf_wolfy_form_trigger = no
+			}
+		}
+	}
+
+	umbral_strip_devoted_clothes = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = clothes
+				template = western_high_nobility_clothes
+				range = { 0 1 }
+			}
+			accessory = {
+				mode = add
+				gene = cloaks
+				template = no_cloak
+				value = 1.0
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 500
+				lasombra_court_umbral_no_nun_portrait_trigger = yes
+				scope:age >= 18
+				portrait_western_clothing_trigger = yes
+				POD_werewolf_wolfy_form_trigger = no
+			}
+		}
+	}
+}

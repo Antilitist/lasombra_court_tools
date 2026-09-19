@@ -1,0 +1,233 @@
+# Compact orgy tallies for event tooltips (avoids per-courtier tooltip walls).
+
+lasombra_court_umbral_orgy_reset_tally_variables_effect = {
+	set_variable = { name = orgy_tally_present value = 0 }
+	set_variable = { name = orgy_tally_portraits value = 0 }
+	set_variable = { name = orgy_tally_laid value = 0 }
+	set_variable = { name = orgy_tally_revelry value = 0 }
+	set_variable = { name = orgy_tally_converted value = 0 }
+	set_variable = { name = orgy_tally_herd value = 0 }
+	set_variable = { name = orgy_tally_ghoul value = 0 }
+	set_variable = { name = orgy_tally_pregnant value = 0 }
+	set_variable = { name = orgy_tally_present_only value = 0 }
+	set_variable = { name = orgy_tally_guests_recruited value = 0 }
+}
+
+lasombra_court_umbral_orgy_save_tally_variables_effect = {
+	lasombra_court_umbral_orgy_reset_tally_variables_effect = yes
+
+	if = {
+		limit = { var:orgy_guest_recruited_count > 0 }
+		set_variable = {
+			name = orgy_tally_guests_recruited
+			value = var:orgy_guest_recruited_count
+		}
+	}
+
+	every_in_list = {
+		variable = orgy_summary_present
+		root = {
+			change_variable = {
+				name = orgy_tally_present
+				add = 1
+			}
+		}
+	}
+
+	every_in_list = {
+		variable = orgy_summary_portraits
+		root = {
+			change_variable = {
+				name = orgy_tally_portraits
+				add = 1
+			}
+		}
+	}
+
+	every_in_list = {
+		variable = orgy_attendees
+		limit = {
+			has_character_flag = orgy_ledger_laid
+		}
+		root = {
+			change_variable = {
+				name = orgy_tally_laid
+				add = 1
+			}
+		}
+	}
+
+	every_in_list = {
+		variable = orgy_attendees
+		limit = {
+			has_character_flag = orgy_ledger_revelry
+		}
+		root = {
+			change_variable = {
+				name = orgy_tally_revelry
+				add = 1
+			}
+		}
+	}
+
+	every_in_list = {
+		variable = orgy_attendees
+		limit = {
+			has_character_flag = orgy_ledger_converted
+		}
+		root = {
+			change_variable = {
+				name = orgy_tally_converted
+				add = 1
+			}
+		}
+	}
+
+	every_in_list = {
+		variable = orgy_attendees
+		limit = {
+			has_character_flag = orgy_ledger_herd
+		}
+		root = {
+			change_variable = {
+				name = orgy_tally_herd
+				add = 1
+			}
+		}
+	}
+
+	every_in_list = {
+		variable = orgy_attendees
+		limit = {
+			has_character_flag = orgy_ledger_ghoul
+		}
+		root = {
+			change_variable = {
+				name = orgy_tally_ghoul
+				add = 1
+			}
+		}
+	}
+
+	every_in_list = {
+		variable = orgy_attendees
+		limit = {
+			has_character_flag = orgy_was_not_pregnant
+			is_pregnant = yes
+		}
+		root = {
+			change_variable = {
+				name = orgy_tally_pregnant
+				add = 1
+			}
+		}
+	}
+
+	every_in_list = {
+		variable = orgy_summary_present
+		limit = {
+			NOR = {
+				has_character_flag = orgy_ledger_laid
+				has_character_flag = orgy_ledger_revelry
+				has_character_flag = orgy_ledger_converted
+				has_character_flag = orgy_ledger_herd
+				has_character_flag = orgy_ledger_ghoul
+			}
+		}
+		root = {
+			change_variable = {
+				name = orgy_tally_present_only
+				add = 1
+			}
+		}
+	}
+}
+
+lasombra_court_umbral_orgy_show_tally_tooltips_effect = {
+	custom_description_no_bullet = { text = lasombra_court_orgy_tally_header }
+
+	if = {
+		limit = { var:orgy_tally_guests_recruited > 0 }
+		custom_description = {
+			text = lasombra_court_orgy_tally_guests_recruited
+			value = var:orgy_tally_guests_recruited
+		}
+	}
+	if = {
+		limit = { var:orgy_tally_present > 0 }
+		custom_description = {
+			text = lasombra_court_orgy_tally_present
+			value = var:orgy_tally_present
+		}
+	}
+	if = {
+		limit = { var:orgy_tally_portraits > 0 }
+		custom_description = {
+			text = lasombra_court_orgy_tally_portraits
+			value = var:orgy_tally_portraits
+		}
+	}
+	if = {
+		limit = { var:orgy_tally_laid > 0 }
+		custom_description = {
+			text = lasombra_court_orgy_tally_laid
+			value = var:orgy_tally_laid
+		}
+	}
+	if = {
+		limit = { var:orgy_tally_pregnant > 0 }
+		custom_description = {
+			text = lasombra_court_orgy_tally_pregnant
+			value = var:orgy_tally_pregnant
+		}
+	}
+	if = {
+		limit = { var:orgy_tally_revelry > 0 }
+		custom_description = {
+			text = lasombra_court_orgy_tally_revelry
+			value = var:orgy_tally_revelry
+		}
+	}
+	if = {
+		limit = { var:orgy_tally_converted > 0 }
+		custom_description = {
+			text = lasombra_court_orgy_tally_converted
+			value = var:orgy_tally_converted
+		}
+	}
+	if = {
+		limit = { var:orgy_tally_herd > 0 }
+		custom_description = {
+			text = lasombra_court_orgy_tally_herd
+			value = var:orgy_tally_herd
+		}
+	}
+	if = {
+		limit = { var:orgy_tally_ghoul > 0 }
+		custom_description = {
+			text = lasombra_court_orgy_tally_ghoul
+			value = var:orgy_tally_ghoul
+		}
+	}
+	if = {
+		limit = { var:orgy_tally_present_only > 0 }
+		custom_description = {
+			text = lasombra_court_orgy_tally_present_only
+			value = var:orgy_tally_present_only
+		}
+	}
+}
+
+lasombra_court_umbral_orgy_show_featured_tooltips_effect = {
+	if = {
+		limit = { var:orgy_tally_portraits > 0 }
+		custom_description_no_bullet = { text = lasombra_court_orgy_tally_featured_header }
+		every_in_list = {
+			variable = orgy_summary_portraits
+			custom_description_no_bullet = {
+				text = lasombra_court_orgy_ledger_featured_tt
+				subject = this
+			}
+		}
+	}
+}

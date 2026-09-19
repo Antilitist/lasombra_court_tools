@@ -1,0 +1,11 @@
+macro = {
+	description = "Does the council owner hold Umbral culture and Via Tenebrarum?"
+	definition = "CouncilOwnerUmbralPenumbra"
+	replace_with = "GreaterThanZero_CFixedPoint( CalculateScriptValue( CouncilWindow.GetCharacter, 'lasombra_court_has_umbral_council_value' ) )"
+}
+
+macro = {
+	description = "Has CoS deferred player startup finished? Gates council HUD until day-0 init is safe."
+	definition = "LasombraCourtPlayerGuiReady"
+	replace_with = "GreaterThanZero_CFixedPoint( CalculateScriptValue( GetPlayer, 'lasombra_court_player_gui_ready_value' ) )"
+}

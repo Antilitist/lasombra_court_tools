@@ -1,0 +1,34 @@
+# Salon of Night — lifestyle GUI hooks (purple XP bar, focus tint, tab icon).
+# Loaded after PoD; used alongside pod_lifestyle_* widgets in window_character_lifestyle.gui.
+
+template lasombra_court_salon_focus_tint {
+	background = {
+		visible = "[EqualTo_string( Lifestyle.GetKey, 'salon_of_night_lifestyle' )]"
+		texture = "gfx/interface/progressbars/progress_purple.dds"
+		alpha = 0.4
+	}
+}
+
+types LasombraCourtSalonLifestyleTypes
+{
+	type lasombra_court_salon_lifestyle_progressbars = widget
+	{
+		size = { 100% 100% }
+
+		progressbar_lifestyle_xp = {
+			visible = "[EqualTo_string( Lifestyle.GetKey, 'salon_of_night_lifestyle' )]"
+			progresstexture = "gfx/interface/progressbars/progress_purple.dds"
+			noprogresstexture = "gfx/interface/progressbars/progress_purple_bg.dds"
+		}
+	}
+
+	type lasombra_court_salon_lifestyle_unspent_points = widget
+	{
+		size = { 100% 100% }
+
+		icon_lifestyle_unspent_points = {
+			visible = "[EqualTo_string( Lifestyle.GetKey, 'salon_of_night_lifestyle' )]"
+			texture = "gfx/interface/icons/lifestyles_perks/node_intrigue.dds"
+		}
+	}
+}

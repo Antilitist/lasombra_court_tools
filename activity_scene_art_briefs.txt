@@ -1,0 +1,143 @@
+# Court of Shadows — Activity Event Scene Art Briefs (v1.24.0)
+# For SuperGrok image generation. Drop finished JPG/PNG into:
+#   tools/activity_scene_sources/<dds_basename>.jpg
+# Then run:  python tools/convert_activity_scene_backgrounds.py
+#
+# Technical: 1592×848 px (16:9), painterly CK3 event-scene style, no text or UI.
+# Shared look: medieval gothic, Via Tenebrarum night liturgy, purple-black shadows,
+# candle and incense haze, Lasombra Court of Shadows — sensual sacrament, never explicit.
+
+# =============================================================================
+# PROCESSION OF THE BLACK CHAPEL — scheduled spine
+# =============================================================================
+
+## lasombra_court_procession_nave_open
+# Event 1100 — The Black Chapel Opens (spotlight guest)
+A vaulted Black Chapel nave at vigil's first hour, votaries gathering between black marble pillars while incense and ash drift through purple candle-smoke. The high altar gleams with blood-wine and spent tapers; masked courtiers in dark liturgical dress turn toward the host's empty judgment seat. Wide cinematic composition, warm ember light against cold abyssal shadow, painterly historical-fantasy illustration.
+
+## lasombra_court_procession_vigil_tone
+# Event 1100b — Tone of the Vigil
+The same chapel nave held in suspended breath after the opening prayer — three moods implied in one frame: solemn sacrament at the altar, welcoming appetite along the side aisles, and dread pooling beneath the rafters. Candle-rows lead the eye to a shadowed pontifical chair; ash motes hang in the air like a decision not yet spoken. Intimate wide shot, rich chiaroscuro, gothic night-purple palette.
+
+## lasombra_court_procession_confession_rail
+# Event 1102 — Confession at the Rail
+A side-altar confessional rail in near-darkness, wrought iron and velvet kneeler worn smooth by secret sins. A single votary kneels in profile while the host's silhouette looms beyond a guttering candle; the chapel behind them dissolves into violet murk. Tension between penance and provocation, close-middle wide framing, whispered intimacy, painterly CK3 event art.
+
+## lasombra_court_procession_blood_wine
+# Event 1103 — Blood-Wine Sacrament
+Altar steps at the vigil's hunger: a chased silver cup of blood-wine passed between shadowed hands, ruby liquid catching candlelight. Faithful blur in the nave while the altar cloth, spent roses, and ash smears tell of a rite tipping from prayer into appetite. Luxurious sacrilegious warmth, shallow depth of field on the cup, decadent gothic color grade.
+
+# =============================================================================
+# PROCESSION — pulse scenes (event 1110; one background per pulse flag)
+# =============================================================================
+
+## lasombra_court_procession_pulse_confession
+# Pulse: Lustful Confession (hear_confession)
+A votary leans to the confessional grille, lips parted on a lustful whisper; the lattice throws barred shadow across their face. The host listens from the dark side of the rail, only a jeweled hand and candle reflected in brass. Claustrophobic side-chapel mood, secretive, dangerous honesty.
+
+## lasombra_court_procession_pulse_indulgence
+# Pulse: Indulgence Granted (grant_indulgence)
+A pontifical hand extends a wax-sealed indulgence scroll above a bowed votary while the Long Night's revel is hinted in the blurred background — loosened collars, laughter without faces. Mercy as seduction; gold seal and purple ribbon against soot-dark stone, soft forgiving light.
+
+## lasombra_court_procession_pulse_sanctify
+# Pulse: Chapel Sanctified (sanctify_chapel)
+The chapel font and altar being anointed with chrism and shadow-smoke, Via Tenebrarum sigils chalked on black marble. Acolytes in hooded black vestments ring the nave; consecration feels hungry rather than chaste. Ascending perspective toward the altar, holy smoke and violet gleam.
+
+## lasombra_court_procession_pulse_ash
+# Pulse: Ash Liturgy (ash_liturgy)
+Close ritual on ash: a silver thurible and dish of pale ash, fingers marking a votary's tongue or brow in the Long Night rite. Rows of bowed silhouettes, candles doubled in polished floor stones. Stark, tactile, penitential — gray ash on warm skin tones, smoky atmosphere.
+
+## lasombra_court_procession_pulse_blood
+# Pulse: Blood Absolution (blood_absolution)
+The high altar awash in steam from a blood absolution basin, crimson droplets on white linen and a raised ceremonial knife laid beside prayer books. Faithful shadows kneel in concentric ranks; the scene feels like mercy sharpened into blade-edge solemnity. Dramatic uplighting, crimson and indigo contrast.
+
+## lasombra_court_procession_pulse_seductive
+# Pulse: Seductive Absolution (seductive_absolution)
+Absolution at the rail becoming flesh: two figures nearly touching across the confessional divide, breath and candle-flame mingling, a fallen veil or glove on the stone floor. Sacrament and seduction inseparable; warm rose-gold highlights on skin, chapel background dissolved to bokeh shadow.
+
+## lasombra_court_procession_pulse_carnal
+# Pulse: Carnal Sacrament (carnal_sacrament)
+A side chapel curtained with black silk for the carnal sacrament — disheveled liturgical linens, overturned chalice, two entwined silhouettes implied behind gauze rather than shown. Oblique tasteful framing through curtain slits; heat, secrecy, post-rite stillness, deep shadow.
+
+## lasombra_court_procession_pulse_benediction
+# Pulse: Shadow Pontiff (pontiff_benediction)
+The Shadow Pontiff elevated on the nave steps, arms wide in benediction, congregation prostrate in a sea of candles. Abyssal shadow seems to pour from the rafters toward the faithful; majesty and menace united. Low-angle heroic composition, vast vertical space, purple-black grandeur.
+
+## lasombra_court_procession_pulse_wine
+# Pulse: Blood-Wine Communion (wine_communion)
+Communion circle in the nave: chained silver ewer passed hand to hand among masked votaries, each mouth stained faintly red. Symmetrical composition down a candle aisle toward the altar; communal hunger, glossy painterly highlights on metal and lips.
+
+# =============================================================================
+# THE VEILED PURSUIT — outdoor gothic-woods cult (v1.40.67 pass)
+# All-female black lace only (no white/cream), deep moonless night, underexposed.
+# Varied / sparse placement per plate; hiding yet want to be found for Seeker's passion.
+# Painterly Orgy-like style. Style master: session 17.jpg (shell).
+# Shell: lasombra_court_veiled_pursuit.dds | Conclusion: pursuit_conclusion.dds
+# Ambience: event:/DLC/EP2/SFX/Events/Backgrounds/evn_background_dark_forest
+# =============================================================================
+
+## lasombra_court_pursuit_veil_descend
+# Event 1200 — The Veils Descend (spotlight guest)
+Moonlit gothic woods at hunt's opening: silk veils drop from black branches, masked women in black lace two-pieces catch identities dissolving into lace and shadow. Blood-wine steam from a stump altar; the Seeker's empty cowl hangs like a promise. Painterly wide shot, cool moonlight, flowing umbral tendrils.
+
+## lasombra_court_pursuit_night_tone
+# Event 1200b — Tone of the Night
+Cult revel tone at a forest path crossroads — sacrament (prayer chalk on root-stone), appetite (spilled wine and loosened masks), shadow (long dread-cast by the host through trunks). Tripartite mood, hunters and hunted blurred in motion among trees.
+
+## lasombra_court_pursuit_corridor_hunt
+# Event 1202 — The Seeker's Turn (asset key kept; art is forest path)
+Forest path mid-hunt: masked Seeker pauses with one hand on bark, listening; distant footsteps scatter behind torn veils. Hunting tension, motion blur on fleeing lace silhouettes, predator patience. Diagonal path perspective, wet leaf gleam, noir sacred game outdoors.
+
+## lasombra_court_pursuit_pre_dawn
+# Event 1203 — Before the Masks Rise
+Pre-dawn grey-blue at the treeline; masks and veils piled on a moss log, blood-wine dregs, two lace-clad figures close in quiet negotiation before names return. Bittersweet hush, cool dawn rim-light on warm skin, intimate wide woods composition.
+
+# =============================================================================
+# THE VEILED PURSUIT — pulse events (1210–1219)
+# =============================================================================
+
+## lasombra_court_pursuit_initiation_font
+# Event 1210 — Initiation at the Font
+Hidden forest font: black stone basin in roots, blood-wine rippling with mask reflections. Found partner led by linked hands; watchers in lace among tree niches. Initiatory awe, wet stone and leaf reflections, ritual intimacy outdoors.
+
+## lasombra_court_pursuit_seeker_claims
+# Event 1211 — The Seeker Claims
+Seeker's mask fills foreground, claiming a trembling partner against a broad trunk; path behind shows hunt witnesses as shadow puppets among branches. Possession and consent tangled; dramatic close-wide, heartbeat stillness before the pairing seals.
+
+## lasombra_court_pursuit_veil_lifted
+# Event 1212 — A Veil Lifted
+Silk veil mid-fall between trees, revealing half a face the cult forbade to name; second masked figure reaches in surprise. Gasp of exposure, fluttering fabric, moon sparks through canopy, scandalous tenderness.
+
+## lasombra_court_pursuit_foreign_oath
+# Event 1213 — Foreign Oath
+Foreign ruler in travel cloak and cult mask kneels in a glade before the host, oath-hand over blood-wine. Diplomacy and appetite braided; moonlit banners of leaf and shadow, respectful yet hungry outdoor atmosphere.
+
+## lasombra_court_pursuit_rival_mask
+# Event 1214 — Rival's Mask
+Discarded rival's mask on leaf-litter beside a guilty attendee's dropped glove; onlookers' masks turn toward the scandal. Sharp intrigue, single moonlight on the telltale mask, wicked woods-salon energy.
+
+## lasombra_court_pursuit_oath_long_night
+# Event 1215 — Oath to the Long Night
+Votary stands on root-steps with raised cup, swearing toward a chalked Long Night sigil on bark while the cult watches from the dark. Solemn cult oath, upward composition, purple incense columns through canopy.
+
+## lasombra_court_pursuit_veil_refused
+# Event 1216 — Veil Refused
+Chaste guest recoils from offered mask and goblet at the treeline, body turned away; masked figures hesitate in the background. Friction and choice — cool moral light on the refuser, warmer hungry shadows on the cult.
+
+## lasombra_court_pursuit_blood_wine_hunt
+# Event 1217 — Blood-Wine
+Blood-wine ewer passed along a chain of gloved hands on a night path; splashes on leaves, masks close in thirst. Kinetic diagonal flow, crimson trails, feverish woods energy.
+
+## lasombra_court_pursuit_salon_votary
+# Event 1218 — Salon Votaries
+Moss-draped nook off the hunt path: votaries on low furs offer sips from delicate cups to the passing host, laughter in shadow. Decadent intimacy, lace and rich fabric, half-hidden faces, warm boudoir light within gothic woods.
+
+## lasombra_court_pursuit_shadow_chant
+# Event 1219 — Shadow Chant
+Dark forest aisle where hooded votaries chant, sound made visible as rippling shadow on trunks; paths branch like a confessional labyrinth. Hypnotic dread, repeating arches of branches, mouths open in song, abyssal purple depth.
+
+## lasombra_court_pursuit_conclusion
+# Event 1201 — The Veils Rise (Pursuit-only; Procession still uses activity_conclusion)
+Dawn greying the treeline; masks lifted, lace figures sated among thinning night and flowing residual shadows. Aftermath hush, county marked by who was found — painterly outdoor close of the Long Night served.
+
+# Shell: lasombra_court_veiled_pursuit — establishing outdoor cult plate (lace, woods, moon, flowing shadows).

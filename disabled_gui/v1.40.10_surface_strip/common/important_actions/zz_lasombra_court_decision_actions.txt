@@ -1,0 +1,262 @@
+# Court of Shadows — per-decision alert icons using each decision's action art.
+
+action_lasombra_court_embrace_decision = {
+	type = alert
+	icon = action_lasombra_court_embrace_decision
+
+	check_create_action = {
+		if = {
+			limit = {
+				decision:lasombra_court_embrace_decision = {
+					save_temporary_scope_as = decision
+					root = {
+						lasombra_court_should_notify_decision_trigger = { DECISION = scope:decision }
+						should_decision_create_alert = scope:decision
+						can_execute_decision = scope:decision
+					}
+				}
+			}
+			try_create_important_action = {
+				important_action_type = action_lasombra_court_embrace_decision
+				actor = root
+				decision = decision:lasombra_court_embrace_decision
+			}
+		}
+	}
+
+	effect = {
+		lasombra_court_important_decision_click_effect = yes
+	}
+}
+
+action_lasombra_court_adopt_faith_decision = {
+	type = alert
+	icon = action_lasombra_court_adopt_faith_decision
+
+	check_create_action = {
+		if = {
+			limit = {
+				decision:lasombra_court_adopt_faith_decision = {
+					save_temporary_scope_as = decision
+					root = {
+						lasombra_court_should_notify_decision_trigger = { DECISION = scope:decision }
+						should_decision_create_alert = scope:decision
+						can_execute_decision = scope:decision
+					}
+				}
+			}
+			try_create_important_action = {
+				important_action_type = action_lasombra_court_adopt_faith_decision
+				actor = root
+				decision = decision:lasombra_court_adopt_faith_decision
+			}
+		}
+	}
+
+	effect = {
+		lasombra_court_important_decision_click_effect = yes
+	}
+}
+
+action_lasombra_court_adopt_culture_decision = {
+	type = alert
+	icon = action_lasombra_court_adopt_culture_decision
+
+	check_create_action = {
+		if = {
+			limit = {
+				decision:lasombra_court_adopt_culture_decision = {
+					save_temporary_scope_as = decision
+					root = {
+						lasombra_court_should_notify_decision_trigger = { DECISION = scope:decision }
+						should_decision_create_alert = scope:decision
+						can_execute_decision = scope:decision
+					}
+				}
+			}
+			try_create_important_action = {
+				important_action_type = action_lasombra_court_adopt_culture_decision
+				actor = root
+				decision = decision:lasombra_court_adopt_culture_decision
+			}
+		}
+	}
+
+	effect = {
+		lasombra_court_important_decision_click_effect = yes
+	}
+}
+
+action_lasombra_court_create_head_of_faith_decision = {
+	type = alert
+	icon = action_lasombra_court_create_head_of_faith_decision
+
+	check_create_action = {
+		if = {
+			limit = {
+				decision:lasombra_court_create_head_of_faith_decision = {
+					save_temporary_scope_as = decision
+					root = {
+						lasombra_court_should_notify_decision_trigger = { DECISION = scope:decision }
+						should_decision_create_alert = scope:decision
+						can_execute_decision = scope:decision
+					}
+				}
+			}
+			try_create_important_action = {
+				important_action_type = action_lasombra_court_create_head_of_faith_decision
+				actor = root
+				decision = decision:lasombra_court_create_head_of_faith_decision
+			}
+		}
+	}
+
+	effect = {
+		lasombra_court_important_decision_click_effect = yes
+	}
+}
+
+action_lasombra_court_search_umbral_consorts_decision = {
+	type = alert
+	icon = action_lasombra_court_search_umbral_consorts_decision
+
+	check_create_action = {
+		if = {
+			limit = {
+				decision:lasombra_court_search_umbral_consorts_decision = {
+					save_temporary_scope_as = decision
+					root = {
+						lasombra_court_should_notify_decision_trigger = { DECISION = scope:decision }
+						should_decision_create_alert = scope:decision
+						can_execute_decision = scope:decision
+					}
+				}
+			}
+			try_create_important_action = {
+				important_action_type = action_lasombra_court_search_umbral_consorts_decision
+				actor = root
+				decision = decision:lasombra_court_search_umbral_consorts_decision
+			}
+		}
+	}
+
+	effect = {
+		lasombra_court_important_decision_click_effect = yes
+	}
+}
+
+action_lasombra_court_umbral_orgy_decision = {
+	type = alert
+	icon = action_lasombra_court_umbral_orgy_decision
+
+	check_create_action = {
+		if = {
+			limit = {
+				decision:lasombra_court_umbral_orgy_decision = {
+					save_temporary_scope_as = decision
+					root = {
+						lasombra_court_should_notify_decision_trigger = { DECISION = scope:decision }
+						should_decision_create_alert = scope:decision
+						can_execute_decision = scope:decision
+					}
+				}
+			}
+			try_create_important_action = {
+				important_action_type = action_lasombra_court_umbral_orgy_decision
+				actor = root
+				decision = decision:lasombra_court_umbral_orgy_decision
+			}
+		}
+	}
+
+	effect = {
+		lasombra_court_important_decision_click_effect = yes
+	}
+}
+
+action_lasombra_court_veil_council_legacy_save_decision = {
+	type = alert
+	icon = action_lasombra_court_adopt_culture_decision
+
+	check_create_action = {
+		if = {
+			limit = {
+				decision:lasombra_court_veil_council_legacy_save_decision = {
+					save_temporary_scope_as = decision
+					root = {
+						lasombra_court_should_notify_decision_trigger = { DECISION = scope:decision }
+						should_decision_create_alert = scope:decision
+						can_execute_decision = scope:decision
+					}
+				}
+			}
+			try_create_important_action = {
+				important_action_type = action_lasombra_court_veil_council_legacy_save_decision
+				actor = root
+				decision = decision:lasombra_court_veil_council_legacy_save_decision
+			}
+		}
+	}
+
+	effect = {
+		lasombra_court_important_decision_click_effect = yes
+	}
+}
+
+action_lasombra_court_umbral_lust_decision = {
+	type = alert
+	icon = action_lasombra_court_umbral_lust_decision
+
+	check_create_action = {
+		if = {
+			limit = {
+				decision:lasombra_court_umbral_lust_decision = {
+					save_temporary_scope_as = decision
+					root = {
+						lasombra_court_should_notify_decision_trigger = { DECISION = scope:decision }
+						should_decision_create_alert = scope:decision
+						can_execute_decision = scope:decision
+					}
+				}
+			}
+			try_create_important_action = {
+				important_action_type = action_lasombra_court_umbral_lust_decision
+				actor = root
+				decision = decision:lasombra_court_umbral_lust_decision
+			}
+		}
+	}
+
+	effect = {
+		lasombra_court_important_decision_click_effect = yes
+	}
+}
+
+# Exclude Court of Shadows from the vanilla decision alert so players do not get duplicate icons.
+action_take_decision = {
+	type = alert
+
+	check_create_action = {
+		every_decision = {
+			limit = {
+				NOT = { lasombra_court_notifyable_decision_trigger = yes }
+				save_temporary_scope_as = decision
+				root = {
+					is_important_decision = scope:decision
+					should_decision_create_alert = scope:decision
+					can_execute_decision = scope:decision
+				}
+			}
+
+			try_create_important_action = {
+				important_action_type = action_take_decision
+				actor = root
+				decision = this
+			}
+		}
+	}
+
+	effect = {
+		lasombra_court_important_decision_click_effect = yes
+	}
+}

@@ -1,0 +1,11 @@
+# Salon of Night — XP pulse hooks (Phase B v1.41.0).
+
+yearly_playable_pulse = {
+	on_actions = { lasombra_court_salon_lifestyle_yearly_pulse }
+}
+
+lasombra_court_salon_lifestyle_yearly_pulse = {
+	effect = {
+		lasombra_court_salon_lifestyle_penumbra_welcome_xp_effect = yes
+	}
+}

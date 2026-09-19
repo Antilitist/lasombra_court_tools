@@ -1,0 +1,184 @@
+namespace = lasombra_court
+
+# Auto-summon subjects below the host, then open the rite.
+lasombra_court.0198 = {
+	type = character_event
+	title = lasombra_court.0198.t
+	desc = lasombra_court.0198.desc
+	theme = wedding_ceremony_activity
+
+	override_background = {
+		reference = lasombra_court_umbral_orgy
+	}
+
+	left_portrait = {
+		character = root
+		camera = camera_event_left_wedding
+		animation = personality_bold
+	}
+
+	immediate = {
+		lasombra_court_umbral_orgy_process_subject_invites_effect = yes
+		lasombra_court_umbral_orgy_gather_attendees_effect = yes
+	}
+
+	option = {
+		name = lasombra_court.0198.a
+		custom_tooltip = lasombra_court.0198.a.tt
+		if = {
+			limit = { exists = scope:orgy_attendee_1 }
+			send_interface_toast = {
+				type = lasombra_court_umbral_orgy_toast
+				title = lasombra_court_umbral_orgy_toast_title
+				left_icon = root
+				right_icon = scope:orgy_attendee_1
+				desc = lasombra_court_umbral_orgy_toast_desc
+			}
+		}
+		else = {
+			send_interface_toast = {
+				type = lasombra_court_umbral_orgy_toast
+				title = lasombra_court_umbral_orgy_toast_title
+				left_icon = root
+				desc = lasombra_court_umbral_orgy_toast_desc
+			}
+		}
+		hidden_effect = {
+			trigger_event = lasombra_court.0200
+		}
+	}
+}
+
+# Yearly Umbral Orgy — wedding layout (6 slots). Portraits: root, then women, then men.
+lasombra_court.0200 = {
+	type = character_event
+	title = lasombra_court.0200.t
+	desc = lasombra_court.0200.desc
+	theme = wedding_ceremony_activity
+
+	override_background = {
+		reference = lasombra_court_umbral_orgy
+	}
+
+	left_portrait = {
+		character = root
+		camera = camera_event_left_wedding
+		animation = flirtation
+	}
+
+	center_portrait = {
+		trigger = { exists = scope:orgy_attendee_1 }
+		character = scope:orgy_attendee_1
+		camera = camera_event_left_wedding
+		animation = flirtation
+	}
+
+	right_portrait = {
+		trigger = { exists = scope:orgy_attendee_2 }
+		character = scope:orgy_attendee_2
+		camera = camera_event_right_wedding
+		animation = flirtation
+	}
+
+	lower_left_portrait = {
+		trigger = { exists = scope:orgy_attendee_3 }
+		character = scope:orgy_attendee_3
+		camera = camera_event_left_wedding
+		animation = flirtation
+	}
+
+	lower_center_portrait = {
+		trigger = { exists = scope:orgy_attendee_4 }
+		character = scope:orgy_attendee_4
+		camera = camera_event_left_wedding
+		animation = flirtation
+	}
+
+	lower_right_portrait = {
+		trigger = { exists = scope:orgy_attendee_5 }
+		character = scope:orgy_attendee_5
+		camera = camera_event_right_wedding
+		animation = flirtation
+	}
+
+	immediate = {
+		play_music_cue = "mx_cue_seduction"
+		lasombra_court_umbral_orgy_clear_summary_lists_effect = yes
+		lasombra_court_umbral_orgy_set_naked_portraits_effect = yes
+		lasombra_court_umbral_orgy_process_courtiers_effect = yes
+		lasombra_court_umbral_orgy_apply_capital_modifier_effect = yes
+		lasombra_court_umbral_orgy_save_tally_variables_effect = yes
+	}
+
+	option = {
+		name = lasombra_court.0200.a
+		add_piety = 50
+		if = {
+			limit = {
+				lasombra_court_penumbra_synergy_trigger = yes
+				dynasty ?= { has_dynasty_perk = penumbra_legacy_2 }
+			}
+			add_piety = 35
+		}
+		stress_impact = {
+			lustful = minor_stress_impact_loss
+			zealous = minor_stress_impact_loss
+			rakish = minor_stress_impact_loss
+			deviant = minor_stress_impact_loss
+			gregarious = minor_stress_impact_loss
+			lifestyle_reveler = minor_stress_impact_loss
+		}
+		custom_tooltip = lasombra_court.0200.a.tt
+	}
+
+	after = {
+		hidden_effect = {
+			lasombra_court_umbral_orgy_clear_naked_portraits_effect = yes
+			trigger_event = lasombra_court.0201
+		}
+	}
+}
+
+# Ledger of the night — who attended and what befell them.
+lasombra_court.0201 = {
+	type = character_event
+	title = lasombra_court.0201.t
+	desc = {
+		desc = lasombra_court.0201.desc
+		desc = lasombra_court.0201.desc_tally
+		triggered_desc = {
+			trigger = {
+				NOR = {
+					variable_list_size = { name = orgy_summary_laid value >= 1 }
+					variable_list_size = { name = orgy_summary_revelry value >= 1 }
+					variable_list_size = { name = orgy_summary_converted value >= 1 }
+					variable_list_size = { name = orgy_summary_herd value >= 1 }
+					variable_list_size = { name = orgy_summary_ghoul value >= 1 }
+				}
+			}
+			desc = lasombra_court.0201.desc_quiet
+		}
+	}
+	theme = lasombra_coa
+
+	override_background = {
+		reference = lasombra_court_umbral_orgy
+	}
+
+	left_portrait = {
+		character = root
+		animation = personality_content
+	}
+
+	option = {
+		name = lasombra_court.0201.a
+		lasombra_court_umbral_orgy_show_tally_tooltips_effect = yes
+		lasombra_court_umbral_orgy_show_featured_tooltips_effect = yes
+		custom_tooltip = lasombra_court.0201.aftermath_tt
+		hidden_effect = {
+			lasombra_court_umbral_orgy_process_aftermath_effect = yes
+			lasombra_court_umbral_orgy_clear_summary_lists_effect = yes
+			lasombra_court_umbral_orgy_clear_invite_lists_effect = yes
+		}
+	}
+}
